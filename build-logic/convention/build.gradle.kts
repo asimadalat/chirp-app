@@ -23,3 +23,29 @@ kotlin {
         jvmTarget = JvmTarget.JVM_17
     }
 }
+
+tasks {
+    validatePlugins {
+        enableStricterValidation = true
+        failOnWarning = true
+    }
+}
+
+gradlePlugin {
+    plugins {
+        register("androidApplication") {
+            id = "com.asimorphic.convention.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
+
+        register("androidComposeApplication") {
+            id = "com.asimorphic.convention.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+
+        register("cmpApplication") {
+            id = "com.asimorphic.convention.cmp.application"
+            implementationClass = "CmpApplicationConventionPlugin"
+        }
+    }
+}

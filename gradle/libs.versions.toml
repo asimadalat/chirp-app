@@ -167,6 +167,10 @@ androidx-runner = { group = "androidx.test", name = "runner", version.ref = "run
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 [plugins]
+conventionAndroidApplication = { id = "com.asimorphic.convention.android.application", version = "unspecified"}
+conventionComposeAndroidApplication = { id = "com.asimorphic.convention.android.application.compose", version = "unspecified"}
+conventionCmpApplication = { id = "com.asimorphic.convention.cmp.application", version = "unspecified"}
+
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
