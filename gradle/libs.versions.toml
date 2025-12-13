@@ -170,6 +170,7 @@ androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 conventionAndroidApplication = { id = "com.asimorphic.convention.android.application", version = "unspecified"}
 conventionComposeAndroidApplication = { id = "com.asimorphic.convention.android.application.compose", version = "unspecified"}
 conventionCmpApplication = { id = "com.asimorphic.convention.cmp.application", version = "unspecified"}
+conventionKmpLibrary = { id = "com.asimorphic.convention.kmp.library", version = "unspecified"}
 
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

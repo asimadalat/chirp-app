@@ -47,5 +47,10 @@ gradlePlugin {
             id = "com.asimorphic.convention.cmp.application"
             implementationClass = "CmpApplicationConventionPlugin"
         }
+
+        register("kmpLibrary") {
+            id = "com.asimorphic.convention.kmp.library"
+            implementationClass = "KmpLibraryConventionPlugin"
+        }
     }
 }
