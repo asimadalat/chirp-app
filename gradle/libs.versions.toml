@@ -7,7 +7,7 @@ ksp = "2.2.0-2.0.2"
 google-services = "4.4.4"
 
 androidDesugarJdkLibs = "2.1.5"
-androidTools = "31.13.1"
+androidTools = "31.13.2"
 
 # Android SDK versions
 android-compileSdk = "36"
@@ -40,7 +40,7 @@ ktor = "3.3.3"
 room = "2.8.4"
 sqlite = "2.6.2"
 datastore = "1.2.0"
-firebase-bom = "34.6.0"
+firebase-bom = "34.7.0"
 adaptive = "1.2.0"
 jetbrains-savedstate = "1.4.0"
 coil = "3.3.0"
@@ -136,10 +136,16 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil-network" }
 
-# Permissions (moko)
+# Permissions
 moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "moko" }
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko" }
 moko-permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "moko" }
+
+# Gradle Plugins
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
 # Desugaring
 android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
