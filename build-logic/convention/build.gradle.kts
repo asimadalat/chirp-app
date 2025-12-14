@@ -11,6 +11,7 @@ dependencies {
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    compileOnly(libs.androidx.room.gradle.plugin)
     implementation(libs.buildkonfig.gradlePlugin)
     implementation(libs.buildkonfig.compiler)
 }
@@ -68,6 +69,11 @@ gradlePlugin {
         register("buildKonfig") {
             id = "com.asimorphic.convention.buildkonfig"
             implementationClass = "BuildKonfigConventionPlugin"
+        }
+
+        register("room") {
+            id = "com.asimorphic.convention.room"
+            implementationClass = "RoomConventionPlugin"
         }
     }
 }

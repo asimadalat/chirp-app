@@ -172,6 +172,7 @@ convention-kmp-library = { id = "com.asimorphic.convention.kmp.library", version
 convention-cmp-library = { id = "com.asimorphic.convention.cmp.library", version = "unspecified" }
 convention-cmp-feature = { id = "com.asimorphic.convention.cmp.feature", version = "unspecified" }
 convention-buildkonfig = { id = "com.asimorphic.convention.buildkonfig", version = "unspecified" }
+convention-room = { id = "com.asimorphic.convention.room", version = "unspecified" }
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
