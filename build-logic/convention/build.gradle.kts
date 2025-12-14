@@ -11,6 +11,8 @@ dependencies {
     compileOnly(libs.android.tools.common)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
+    implementation(libs.buildkonfig.gradlePlugin)
+    implementation(libs.buildkonfig.compiler)
 }
 
 java {
@@ -51,6 +53,21 @@ gradlePlugin {
         register("kmpLibrary") {
             id = "com.asimorphic.convention.kmp.library"
             implementationClass = "KmpLibraryConventionPlugin"
+        }
+
+        register("cmpLibrary") {
+            id = "com.asimorphic.convention.cmp.library"
+            implementationClass = "CmpLibraryConventionPlugin"
+        }
+
+        register("cmpFeature") {
+            id = "com.asimorphic.convention.cmp.feature"
+            implementationClass = "CmpFeatureConventionPlugin"
+        }
+
+        register("buildKonfig") {
+            id = "com.asimorphic.convention.buildkonfig"
+            implementationClass = "BuildKonfigConventionPlugin"
         }
     }
 }
