@@ -17,6 +17,8 @@ kotlin {
                 implementation(projects.core.domain)
 
                 implementation(compose.components.resources)
+
+                implementation(dependencyNotation = libs.material3.adaptive)
             }
         }
 
