@@ -36,6 +36,7 @@ kotlinx-datetime = "0.7.1"
 # Third party
 koin = "4.1.1"
 ktor = "3.3.3"
+kermit = "2.0.8"
 room = "2.8.4"
 sqlite = "2.6.2"
 datastore = "1.2.0"
@@ -135,6 +136,9 @@ moko-permissions = { module = "dev.icerock.moko:permissions", version.ref = "mok
 moko-permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko" }
 moko-permissions-notifications = { module = "dev.icerock.moko:permissions-notifications", version.ref = "moko" }
 
+# Logging
+touchlab-kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
+
 android-desugarJdkLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
@@ -207,5 +211,6 @@ ktor-common = [
     "ktor-client-core",
     "ktor-client-content-negotiation",
     "ktor-serialization-kotlinx-json",
-    "ktor-client-auth"
+    "ktor-client-auth",
+    "ktor-client-logging"
 ]

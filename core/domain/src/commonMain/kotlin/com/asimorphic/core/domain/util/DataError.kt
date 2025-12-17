@@ -9,7 +9,7 @@ sealed interface DataError: Error {
         NOT_FOUND,
         CONFLICT,
         INTERNAL_SERVER_ERROR,
-        TOO_MANY_REQUEST,
+        TOO_MANY_REQUESTS,
         NO_INTERNET,
         PAYLOAD_TOO_LARGE,
         SERVICE_UNAVAILABLE,
