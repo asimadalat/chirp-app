@@ -1,32 +1,24 @@
 package com.asimorphic.core.designsystem.component.text_field
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.BasicSecureTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.TextObfuscationMode
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import chirp.core.designsystem.generated.resources.Res
-import chirp.core.designsystem.generated.resources.hide_password
-import chirp.core.designsystem.generated.resources.show_password
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -89,6 +81,7 @@ fun ChirpPasswordTextField(
                         innerBox()
                     }
 
+//                    TODO: Add show/hide password drawable vectors
 //                    Icon(
 //                        imageVector = if (isPasswordVisible) {
 //
@@ -104,7 +97,12 @@ fun ChirpPasswordTextField(
 //                        modifier = Modifier
 //                            .size(size = 20.dp)
 //                            .clickable(
-//                                interactionSource = remember { MutableInteractionSource() }
+//                                interactionSource = remember { MutableInteractionSource() },
+//                                indication = ripple(
+//                                    bounded = false,
+//                                    radius = 20.dp
+//                                ),
+//                                onClick = onToggleVisibilityClick
 //                            )
 //                    )
                 }
