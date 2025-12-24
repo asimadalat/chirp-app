@@ -18,6 +18,9 @@ kotlin {
                 implementation(projects.core.designsystem)
                 implementation(projects.core.domain)
                 implementation(projects.core.presentation)
+
+                implementation(dependencyNotation = compose.components.resources)
+                implementation(dependencyNotation = compose.components.uiToolingPreview)
             }
         }
 

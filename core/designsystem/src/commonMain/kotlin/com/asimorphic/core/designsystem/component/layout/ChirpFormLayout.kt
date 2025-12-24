@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.asimorphic.core.designsystem.component.brand.ChirpLogoBrand
 import com.asimorphic.core.designsystem.theme.ChirpTheme
@@ -34,9 +35,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ChirpFormLayout(
     headerText: String,
     logo: @Composable () -> Unit,
-    formContent: @Composable ColumnScope.() -> Unit,
+    modifier: Modifier = Modifier,
     errorText: String? = null,
-    modifier: Modifier = Modifier
+    formContent: @Composable ColumnScope.() -> Unit
 ) {
     val screenSizeType: DeviceScreenSizeType = currentDeviceScreenSizeType()
     val headerColor = if (screenSizeType == DeviceScreenSizeType.MOBILE_LANDSCAPE) {
@@ -48,7 +49,7 @@ fun ChirpFormLayout(
     when (screenSizeType) {
         DeviceScreenSizeType.MOBILE_PORTRAIT -> {
             ChirpSurface(
-                modifier = Modifier
+                modifier = modifier
                     .consumeWindowInsets(insets = WindowInsets.navigationBars)
                     .consumeWindowInsets(insets = WindowInsets.displayCutout),
                 header =  {
@@ -85,9 +86,10 @@ fun ChirpFormLayout(
                     .spacedBy(
                         space = 16.dp
                     ),
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
                     .consumeWindowInsets(insets = WindowInsets.displayCutout)
+                    .consumeWindowInsets(insets = WindowInsets.navigationBars)
             ) {
                 Column(
                     modifier = Modifier
@@ -105,14 +107,17 @@ fun ChirpFormLayout(
                     ChirpAuthHeaderSection(
                         headerText = headerText,
                         headerColor = headerColor,
-                        errorText = errorText
+                        errorText = errorText,
+                        headerTextAlignment = TextAlign.Start
                     )
                 }
                 ChirpSurface(
                       modifier = Modifier
                           .weight(weight = 1f)
                 ) {
+                    Spacer(modifier = Modifier.height(height = 14.dp))
                     formContent()
+                    Spacer(modifier = Modifier.height(height = 14.dp))
                 }
             }
         }
@@ -120,7 +125,7 @@ fun ChirpFormLayout(
         DeviceScreenSizeType.TABLET_LANDSCAPE,
         DeviceScreenSizeType.DESKTOP -> {
             Column(
-                modifier = Modifier
+                modifier = modifier
                     .fillMaxSize()
                     .background(
                         color = MaterialTheme.colorScheme.background
@@ -150,10 +155,6 @@ fun ChirpFormLayout(
                         .padding(
                             horizontal = 26.dp,
                             vertical = 34.dp
-                        ),
-                    verticalArrangement = Arrangement
-                        .spacedBy(
-                            space = 24.dp
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

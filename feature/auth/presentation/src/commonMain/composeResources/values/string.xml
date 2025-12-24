@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="welcome_to_chirp">Welcome to Chirp!</string>
+    <string name="username">Username</string>
+    <string name="username_placeholder">Chirp</string>
+    <string name="username_hint">Enter a username between 4 and 20 characters</string>
+    <string name="email">Email</string>
+    <string name="email_placeholder">hello@chirp.com</string>
+    <string name="password">Password</string>
+    <string name="password_placeholder">Password</string>
+    <string name="password_hint">Use 8+ characters, at least one number and one symbol</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="error_account_exists">A Chirp account with that email or username already exists</string>
+    <string name="error_invalid_username">Username must be between 4 and 20 characters</string>
+    <string name="error_invalid_email">Please enter a valid email address</string>
+    <string name="error_invalid_password">Password must be 8+ characters, at least one number and one symbol</string>
+</resources>

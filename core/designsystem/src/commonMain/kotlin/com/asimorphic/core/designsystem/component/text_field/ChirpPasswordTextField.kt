@@ -44,7 +44,7 @@ fun ChirpPasswordTextField(
     ) { styleModifier, interactionSource ->
         BasicSecureTextField(
             state = state,
-            modifier = modifier,
+            modifier = styleModifier,
             enabled = enabled,
             textObfuscationMode = if (isPasswordVisible) {
                 TextObfuscationMode.Visible

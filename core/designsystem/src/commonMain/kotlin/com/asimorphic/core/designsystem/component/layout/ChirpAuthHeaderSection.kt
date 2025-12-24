@@ -14,13 +14,14 @@ import androidx.compose.ui.text.style.TextAlign
 fun ColumnScope.ChirpAuthHeaderSection(
     headerText: String,
     headerColor: Color,
-    errorText: String? = null
+    errorText: String? = null,
+    headerTextAlignment: TextAlign = TextAlign.Center
 ) {
     Text(
         text = headerText,
         color = headerColor,
         style = MaterialTheme.typography.titleLarge,
-        textAlign = TextAlign.Center,
+        textAlign = headerTextAlignment,
         modifier = Modifier
             .fillMaxWidth()
     )
@@ -33,7 +34,7 @@ fun ColumnScope.ChirpAuthHeaderSection(
                 text = errorText,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.labelSmall,
-                textAlign = TextAlign.Center,
+                textAlign = headerTextAlignment,
                 modifier = Modifier
                     .fillMaxWidth()
             )
