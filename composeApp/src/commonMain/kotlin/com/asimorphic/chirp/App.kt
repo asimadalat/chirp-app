@@ -10,6 +10,6 @@ import com.asimorphic.core.designsystem.theme.ChirpTheme
 @Preview
 fun App() {
     ChirpTheme {
-        RegisterRoot()
+        RegisterRoot(onRegisterSuccess = {})
     }
 }

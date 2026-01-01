@@ -19,6 +19,7 @@ kotlin {
 
                 implementation(dependencyNotation = libs.bundles.ktor.common)
                 implementation(dependencyNotation = libs.touchlab.kermit)
+                implementation(dependencyNotation = libs.koin.core)
             }
         }
 

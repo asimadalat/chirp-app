@@ -19,6 +19,8 @@ kotlin {
                 implementation(projects.core.domain)
                 implementation(projects.core.presentation)
 
+                implementation(dependencyNotation = libs.bundles.koin.common)
+
                 implementation(dependencyNotation = compose.components.resources)
                 implementation(dependencyNotation = compose.components.uiToolingPreview)
             }
