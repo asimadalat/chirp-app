@@ -1,4 +1,4 @@
-package com.asimorphic.core.data.dependency_injection
+package com.asimorphic.core.data.di
 
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin

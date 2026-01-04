@@ -1,7 +1,7 @@
-package com.asimorphic.chirp.dependency_injection
+package com.asimorphic.chirp.di
 
-import com.asimorphic.auth.presentation.dependency_injection.authPresentationModule
-import com.asimorphic.core.data.dependency_injection.coreDataModule
+import com.asimorphic.auth.presentation.di.authPresentationModule
+import com.asimorphic.core.data.di.coreDataModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 

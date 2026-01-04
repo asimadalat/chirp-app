@@ -15,4 +15,7 @@
     <string name="error_invalid_username">Username must be between 4 and 20 characters</string>
     <string name="error_invalid_email">Please enter a valid email address</string>
     <string name="error_invalid_password">Password must be 8+ characters, at least one number and one symbol</string>
+    <string name="account_successfully_created">Chirp successfully created!</string>
+    <string name="verification_email_sent_to_x">A verification email has been sent to %1$s</string>
+    <string name="resend_verification_email">Resend Verification Email</string>
 </resources>

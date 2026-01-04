@@ -1,4 +1,4 @@
-package com.asimorphic.core.data.dependency_injection
+package com.asimorphic.core.data.di
 
 import com.asimorphic.core.data.auth.KtorAuthService
 import com.asimorphic.core.data.log.KermitLogger

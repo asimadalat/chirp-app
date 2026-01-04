@@ -61,24 +61,33 @@ class RegisterViewModel(
     private val passwordFlow = snapshotFlow { state.value.passwordTextFieldState.text.toString() }
         .map { password -> PasswordValidator.validate(password = password).isValidPassword }
         .distinctUntilChanged()
+    private val isRegisteringFlow = state
+        .map { it.isRegistering }
+        .distinctUntilChanged()
 
     private fun observeValidationState() {
         combine(
             flow = usernameFlow,
             flow2 = emailFlow,
-            flow3 = passwordFlow
-        ) { usernameValid, emailValid, passwordValid ->
+            flow3 = passwordFlow,
+            flow4 = isRegisteringFlow
+        ) { usernameValid, emailValid, passwordValid, isRegistering ->
             val allValid = usernameValid && emailValid && passwordValid
             _state.update { it.copy(
-                canRegister = !it.isRegistering && allValid
+                canRegister = !isRegistering && allValid
             ) }
         }.launchIn(viewModelScope)
     }
 
     fun onAction(action: RegisterAction) {
         when (action) {
-            RegisterAction.OnLoginClick -> validateFormInputs()
+            RegisterAction.OnTogglePasswordVisibilityClick -> {
+                _state.update { it.copy(
+                    isPasswordVisible = !it.isPasswordVisible
+                ) }
+            }
             RegisterAction.OnRegisterClick -> register()
+            RegisterAction.OnLoginClick -> Unit
             else -> Unit
         }
     }

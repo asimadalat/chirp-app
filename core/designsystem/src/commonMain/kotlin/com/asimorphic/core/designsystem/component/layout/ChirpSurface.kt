@@ -29,6 +29,7 @@ fun ChirpSurface(
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
         ) {
