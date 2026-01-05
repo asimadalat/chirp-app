@@ -5,8 +5,10 @@ import com.asimorphic.core.data.dto.request.RegisterRequest
 import com.asimorphic.core.data.network.get
 import com.asimorphic.core.data.network.post
 import com.asimorphic.core.domain.auth.AuthService
+import com.asimorphic.core.domain.model.AuthCredential
 import com.asimorphic.core.domain.util.DataError
 import com.asimorphic.core.domain.util.EmptyResult
+import com.asimorphic.core.domain.util.Result
 import io.ktor.client.HttpClient
 
 class KtorAuthService(
@@ -25,6 +27,13 @@ class KtorAuthService(
                 password = password
             )
         )
+    }
+
+    override suspend fun login(
+        email: String,
+        password: String
+    ): Result<AuthCredential, DataError.Remote> {
+        // TODO: Make API call, retrieve credentials
     }
 
     override suspend fun resendVerificationEmail(
