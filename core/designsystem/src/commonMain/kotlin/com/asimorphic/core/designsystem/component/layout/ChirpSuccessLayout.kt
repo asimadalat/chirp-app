@@ -1,6 +1,7 @@
 package com.asimorphic.core.designsystem.component.layout
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,9 +25,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ChirpSuccessLayout(
     title: String,
     description: String,
-    icon: @Composable () -> Unit,
+    icon: @Composable ColumnScope.() -> Unit,
     primaryButton: @Composable () -> Unit,
     secondaryButton: @Composable (() -> Unit)? = null,
+    secondaryError: String? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -71,6 +73,20 @@ fun ChirpSuccessLayout(
                         .height(height = 8.dp)
                 )
                 secondaryButton()
+                if (secondaryError != null) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(height = 6.dp)
+                    )
+                    Text(
+                        text = secondaryError,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
 
             Spacer(

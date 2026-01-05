@@ -1,17 +1,35 @@
 package com.asimorphic.auth.presentation.register_success
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asimorphic.core.domain.auth.AuthService
+import com.asimorphic.core.domain.util.onFailure
+import com.asimorphic.core.domain.util.onSuccess
+import com.asimorphic.core.presentation.mapper.toUiText
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class RegisterSuccessViewModel : ViewModel() {
+class RegisterSuccessViewModel(
+    private val authService: AuthService,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
-    private val _state = MutableStateFlow(RegisterSuccessState())
+    private val eventChannel = Channel<RegisterSuccessEvent>()
+    val events = eventChannel.receiveAsFlow()
+
+    private val email = savedStateHandle.get<String>("email")
+        ?: throw IllegalStateException("Register success screen missing email argument.")
+
+    private val _state = MutableStateFlow(value = RegisterSuccessState())
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
@@ -27,8 +45,33 @@ class RegisterSuccessViewModel : ViewModel() {
 
     fun onAction(action: RegisterSuccessAction) {
         when (action) {
+            is RegisterSuccessAction.OnResendVerificationEmailClick -> resendVerification()
             else -> Unit //TODO: Handle actions
         }
     }
 
+    private fun resendVerification() {
+        if (state.value.isResendingVerificationEmail)
+            return
+
+        viewModelScope.launch {
+            _state.update { it.copy(
+                isResendingVerificationEmail = true
+            ) }
+
+            authService.resendVerificationEmail(email)
+                .onSuccess {
+                    _state.update { it.copy(
+                        isResendingVerificationEmail = false
+                    ) }
+                    eventChannel.send(element = RegisterSuccessEvent.ResendVerificationEmailSuccess)
+                }
+                .onFailure { error ->
+                    _state.update { it.copy(
+                        isResendingVerificationEmail = false,
+                        resendVerificationError = error.toUiText()
+                    ) }
+                }
+        }
+    }
 }

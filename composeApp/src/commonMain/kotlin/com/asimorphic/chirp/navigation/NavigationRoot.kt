@@ -16,7 +16,9 @@ fun NavigationRoot() {
     ) {
         authGraph(
             navController = navController,
-            onLoginSuccess = {}
+            onLoginSuccess = {
+
+            }
         )
     }
 }

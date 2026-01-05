@@ -26,6 +26,8 @@ kotlin {
             implementation(projects.feature.chat.domain)
             implementation(projects.feature.chat.presentation)
 
+            implementation(dependencyNotation = libs.jetbrains.compose.navigation)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -34,8 +36,6 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jetbrains.compose.viewmodel)
             implementation(libs.jetbrains.lifecycle.compose)
-
-            implementation(dependencyNotation = libs.jetbrains.compose.navigation)
         }
 //        jvmMain.dependencies {
 //            implementation(compose.desktop.currentOs)
