@@ -1,7 +1,10 @@
 package com.asimorphic.core.data.auth
 
+import com.asimorphic.core.data.dto.AuthCredentialDto
 import com.asimorphic.core.data.dto.request.EmailRequest
+import com.asimorphic.core.data.dto.request.LoginRequest
 import com.asimorphic.core.data.dto.request.RegisterRequest
+import com.asimorphic.core.data.mapper.toModel
 import com.asimorphic.core.data.network.get
 import com.asimorphic.core.data.network.post
 import com.asimorphic.core.domain.auth.AuthService
@@ -9,6 +12,7 @@ import com.asimorphic.core.domain.model.AuthCredential
 import com.asimorphic.core.domain.util.DataError
 import com.asimorphic.core.domain.util.EmptyResult
 import com.asimorphic.core.domain.util.Result
+import com.asimorphic.core.domain.util.map
 import io.ktor.client.HttpClient
 
 class KtorAuthService(
@@ -33,7 +37,15 @@ class KtorAuthService(
         email: String,
         password: String
     ): Result<AuthCredential, DataError.Remote> {
-        // TODO: Make API call, retrieve credentials
+        return httpClient.post<LoginRequest, AuthCredentialDto>(
+            route = "api/auth/login",
+            body = LoginRequest(
+                email = email,
+                password = password
+            )
+        ).map { authCredentialDto ->
+            authCredentialDto.toModel()
+        }
     }
 
     override suspend fun resendVerificationEmail(

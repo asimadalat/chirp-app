@@ -20,12 +20,16 @@ kotlin {
                 implementation(dependencyNotation = libs.bundles.ktor.common)
                 implementation(dependencyNotation = libs.touchlab.kermit)
                 implementation(dependencyNotation = libs.koin.core)
+
+                implementation(dependencyNotation = libs.datastore)
+                implementation(dependencyNotation = libs.datastore.preferences)
             }
         }
 
         androidMain {
             dependencies {
                 implementation(dependencyNotation = libs.ktor.client.okhttp)
+                implementation(dependencyNotation = libs.koin.android)
             }
         }
 

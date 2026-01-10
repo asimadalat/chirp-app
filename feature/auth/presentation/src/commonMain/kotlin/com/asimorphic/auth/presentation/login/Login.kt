@@ -32,6 +32,7 @@ import com.asimorphic.core.designsystem.component.layout.ChirpSnackbarScaffold
 import com.asimorphic.core.designsystem.component.text_field.ChirpPasswordTextField
 import com.asimorphic.core.designsystem.component.text_field.ChirpTextField
 import com.asimorphic.core.designsystem.theme.ChirpTheme
+import com.asimorphic.core.presentation.util.ObserveAsEvents
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -45,6 +46,12 @@ fun LoginRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            LoginEvent.Success -> onLoginSuccess()
+        }
+    }
 
     LoginScreen(
         state = state,
