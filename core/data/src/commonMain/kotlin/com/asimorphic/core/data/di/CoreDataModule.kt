@@ -17,7 +17,7 @@ expect val platformCoreDataModule: Module
 val coreDataModule = module {
     includes(platformCoreDataModule)
     single<ChirpLogger> { KermitLogger }
-    single { HttpClientFactory(chirpLogger = get()).create(get()) }
+    single { HttpClientFactory(chirpLogger = get(), sessionService = get()).create(get()) }
     singleOf(constructor = ::KtorAuthService) bind AuthService::class
     singleOf(constructor = ::DataStoreSessionService) bind SessionService::class
 }
