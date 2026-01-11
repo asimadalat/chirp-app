@@ -10,14 +10,17 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        var showSplashScreen = true
+        installSplashScreen().setKeepOnScreenCondition {
+            showSplashScreen
+        }
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
             App(
                 onAuthStatusChecked = {
-
+                    showSplashScreen = false
                 }
             )
         }
@@ -27,5 +30,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App()
+    App(onAuthStatusChecked = {})
 }
