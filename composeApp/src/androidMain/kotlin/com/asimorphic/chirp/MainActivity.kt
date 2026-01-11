@@ -30,5 +30,5 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App(onAuthStatusChecked = {})
+    App()
 }

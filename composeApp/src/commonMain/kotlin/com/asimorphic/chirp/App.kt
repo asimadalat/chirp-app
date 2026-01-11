@@ -18,7 +18,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 @Preview
 fun App(
-    onAuthStatusChecked: () -> Unit,
+    onAuthStatusChecked: () -> Unit = {},
     viewModel: MainViewModel = koinViewModel()
 ) {
     val navController = rememberNavController()
