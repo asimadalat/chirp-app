@@ -11,6 +11,7 @@ kotlin {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
+            implementation(dependencyNotation = libs.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(projects.core.data)
@@ -27,6 +28,7 @@ kotlin {
             implementation(projects.feature.chat.presentation)
 
             implementation(dependencyNotation = libs.jetbrains.compose.navigation)
+            implementation(dependencyNotation = libs.bundles.koin.common)
 
             implementation(compose.runtime)
             implementation(compose.foundation)

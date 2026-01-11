@@ -4,7 +4,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.asimorphic.core.data.dto.AuthCredentialDto
 import com.asimorphic.core.data.mapper.toDto
+import com.asimorphic.core.data.mapper.toModel
 import com.asimorphic.core.domain.auth.SessionService
 import com.asimorphic.core.domain.model.AuthCredential
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +27,9 @@ class DataStoreSessionService(
         return dataStore.data.map { preferences ->
             val serialisedJson = preferences[authCredentialKey]
             serialisedJson?.let {
-                json.decodeFromString(string = it)
+                json.decodeFromString<AuthCredentialDto>(
+                    string = it
+                ).toModel()
             }
         }
     }

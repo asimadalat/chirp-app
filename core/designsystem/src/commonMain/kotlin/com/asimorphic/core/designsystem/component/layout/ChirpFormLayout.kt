@@ -28,6 +28,7 @@ import com.asimorphic.core.designsystem.component.brand.ChirpLogoBrand
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
+import com.asimorphic.core.presentation.util.clearFocusOnTap
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -51,7 +52,8 @@ fun ChirpFormLayout(
             ChirpSurface(
                 modifier = modifier
                     .consumeWindowInsets(insets = WindowInsets.navigationBars)
-                    .consumeWindowInsets(insets = WindowInsets.displayCutout),
+                    .consumeWindowInsets(insets = WindowInsets.displayCutout)
+                    .clearFocusOnTap(),
                 header =  {
                     Spacer(
                         modifier = Modifier

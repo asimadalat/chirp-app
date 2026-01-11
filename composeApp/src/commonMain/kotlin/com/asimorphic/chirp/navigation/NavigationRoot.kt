@@ -10,10 +10,13 @@ import com.asimorphic.chat.presentation.chat_menu.ChatMenuRoute
 import com.asimorphic.chat.presentation.chat_menu.ChatMenuRoot
 
 @Composable
-fun NavigationRoot(navController: NavHostController) {
+fun NavigationRoot(
+    navController: NavHostController,
+    startDestination: Any
+) {
     NavHost(
         navController = navController,
-        startDestination = AuthGraphRoutes.Graph
+        startDestination = startDestination
     ) {
         authGraph(
             navController = navController,
