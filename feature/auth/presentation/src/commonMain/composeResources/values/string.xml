@@ -30,4 +30,6 @@
     <string name="forgot_password">Forgot password?</string>
     <string name="create_account">Create Account</string>
     <string name="error_email_not_verified">Login failed. Please verify your email.</string>
+    <string name="submit">Submit</string>
+    <string name="forgot_password_email_sent_success">Verification email successfully sent. Please check your inbox.</string>
 </resources>
