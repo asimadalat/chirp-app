@@ -32,4 +32,10 @@
     <string name="error_email_not_verified">Login failed. Please verify your email.</string>
     <string name="submit">Submit</string>
     <string name="forgot_password_email_sent_success">Verification email successfully sent. Please check your inbox.</string>
+    <string name="create_a_new_password">Create a New Password</string>
+    <string name="error_email_link_expired_or_invalid">Link has expired or is invalid. Please request a new email verification link.</string>
+    <string name="new_password">New Password</string>
+    <string name="confirm_new_password">Confirm New Password</string>
+    <string name="reset_password_success">Your password has been successfully changed. You can now log in with your new password.</string>
+    <string name="error_cannot_reuse_password">The new password must not match your existing password.</string>
 </resources>

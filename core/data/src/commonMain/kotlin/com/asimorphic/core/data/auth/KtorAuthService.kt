@@ -3,6 +3,7 @@ package com.asimorphic.core.data.auth
 import com.asimorphic.core.data.dto.AuthCredentialDto
 import com.asimorphic.core.data.dto.request.EmailRequest
 import com.asimorphic.core.data.dto.request.LoginRequest
+import com.asimorphic.core.data.dto.request.PasswordResetRequest
 import com.asimorphic.core.data.dto.request.RegisterRequest
 import com.asimorphic.core.data.mapper.toModel
 import com.asimorphic.core.data.network.get
@@ -72,6 +73,19 @@ class KtorAuthService(
         return httpClient.post<EmailRequest, Unit>(
             route = "/api/auth/forgot-password",
             body = EmailRequest(email = email)
+        )
+    }
+
+    override suspend fun resetPassword(
+        token: String,
+        newPassword: String
+    ): EmptyResult<DataError.Remote> {
+        return httpClient.post<PasswordResetRequest, Unit>(
+            route = "/api/auth/reset-password",
+            body = PasswordResetRequest(
+                token = token,
+                newPassword = newPassword
+            )
         )
     }
 }

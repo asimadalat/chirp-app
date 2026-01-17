@@ -5,6 +5,7 @@ import com.asimorphic.auth.presentation.forgot_password.ForgotPasswordViewModel
 import com.asimorphic.auth.presentation.login.LoginViewModel
 import com.asimorphic.auth.presentation.register.RegisterViewModel
 import com.asimorphic.auth.presentation.register_success.RegisterSuccessViewModel
+import com.asimorphic.auth.presentation.reset_password.ResetPasswordViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -13,5 +14,6 @@ val authPresentationModule = module {
     viewModelOf(constructor = ::RegisterSuccessViewModel)
     viewModelOf(constructor = ::EmailVerificationViewModel)
     viewModelOf(constructor = ::ForgotPasswordViewModel)
+    viewModelOf(constructor = ::ResetPasswordViewModel)
     viewModelOf(constructor = ::LoginViewModel)
 }

@@ -10,6 +10,7 @@ import com.asimorphic.auth.presentation.forgot_password.ForgotPasswordRoot
 import com.asimorphic.auth.presentation.login.LoginRoot
 import com.asimorphic.auth.presentation.register.RegisterRoot
 import com.asimorphic.auth.presentation.register_success.RegisterSuccessRoot
+import com.asimorphic.auth.presentation.reset_password.ResetPasswordRoot
 
 fun NavGraphBuilder.authGraph(
     navController: NavController,
@@ -95,6 +96,18 @@ fun NavGraphBuilder.authGraph(
         }
         composable<AuthGraphRoutes.ForgotPassword> {
             ForgotPasswordRoot()
+        }
+        composable<AuthGraphRoutes.ResetPassword>(
+            deepLinks = listOf(
+                navDeepLink {
+                    this.uriPattern = "https://api.chirp.asimorphic.dev/api/auth/reset-password?token={token}"
+                },
+                navDeepLink {
+                    this.uriPattern = "chirp://api.chirp.asimorphic.dev/api/auth/reset-password?token={token}"
+                },
+            )
+        ) {
+            ResetPasswordRoot()
         }
     }
 }
