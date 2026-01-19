@@ -17,6 +17,9 @@ kotlin {
 
                 implementation(dependencyNotation = projects.core.presentation)
 
+                implementation(dependencyNotation = libs.coil.compose)
+                implementation(dependencyNotation = libs.coil.network.ktor)
+
                 implementation(dependencyNotation = compose.components.resources)
                 implementation(dependencyNotation = compose.components.uiToolingPreview)
             }
