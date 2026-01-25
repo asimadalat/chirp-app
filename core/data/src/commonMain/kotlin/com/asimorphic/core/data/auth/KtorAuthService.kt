@@ -25,7 +25,7 @@ class KtorAuthService(
         password: String
     ): EmptyResult<DataError.Remote> {
         return httpClient.post(
-            route = "api/auth/register",
+            route = "/auth/register",
             body = RegisterRequest(
                 username = username,
                 email = email,
@@ -39,7 +39,7 @@ class KtorAuthService(
         password: String
     ): Result<AuthCredential, DataError.Remote> {
         return httpClient.post<LoginRequest, AuthCredentialDto>(
-            route = "api/auth/login",
+            route = "/auth/login",
             body = LoginRequest(
                 email = email,
                 password = password
@@ -53,7 +53,7 @@ class KtorAuthService(
         email: String
     ): EmptyResult<DataError.Remote> {
         return httpClient.post(
-            route = "/api/auth/resend-verification",
+            route = "/auth/resend-verification",
             body = EmailRequest(email = email)
         )
     }
@@ -62,7 +62,7 @@ class KtorAuthService(
         token: String
     ): EmptyResult<DataError.Remote> {
         return httpClient.get(
-            route = "/api/auth/verify-email",
+            route = "/auth/verify-email",
             queryParams = mapOf("token" to token)
         )
     }
@@ -71,7 +71,7 @@ class KtorAuthService(
         email: String
     ): EmptyResult<DataError.Remote> {
         return httpClient.post<EmailRequest, Unit>(
-            route = "/api/auth/forgot-password",
+            route = "/auth/forgot-password",
             body = EmailRequest(email = email)
         )
     }
@@ -81,7 +81,7 @@ class KtorAuthService(
         newPassword: String
     ): EmptyResult<DataError.Remote> {
         return httpClient.post<PasswordResetRequest, Unit>(
-            route = "/api/auth/reset-password",
+            route = "/auth/reset-password",
             body = PasswordResetRequest(
                 token = token,
                 newPassword = newPassword

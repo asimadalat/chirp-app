@@ -19,6 +19,7 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(dependencyNotation = libs.material3.adaptive)
+                implementation(dependencyNotation = libs.bundles.koin.common)
             }
         }
 

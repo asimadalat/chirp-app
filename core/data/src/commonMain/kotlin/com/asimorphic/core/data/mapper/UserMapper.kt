@@ -8,7 +8,7 @@ fun UserDto.toModel(): User {
         id = id,
         username = username,
         email = email,
-        hasVerifiedEmail = hasVerifiedEmail,
+        isEmailVerified = isEmailVerified,
         profilePictureUrl = profilePictureUrl
     )
 }
@@ -18,7 +18,7 @@ fun User.toDto(): UserDto {
         id = id,
         username = username,
         email = email,
-        hasVerifiedEmail = hasVerifiedEmail,
+        isEmailVerified = isEmailVerified,
         profilePictureUrl = profilePictureUrl
     )
 }
