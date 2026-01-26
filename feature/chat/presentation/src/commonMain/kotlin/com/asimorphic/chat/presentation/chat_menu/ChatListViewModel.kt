@@ -6,7 +6,7 @@ import com.asimorphic.core.domain.auth.SessionService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class ChatMenuViewModel(
+class ChatListViewModel(
     private val sessionService: SessionService
 ): ViewModel() {
 

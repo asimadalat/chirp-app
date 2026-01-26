@@ -4,12 +4,11 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.asimorphic.auth.presentation.navigation.AuthGraphRoutes
-import com.asimorphic.chat.presentation.chat_menu.ChatMenuRoute
+import com.asimorphic.chat.presentation.navigation.ChatGraphRoutes
 import com.asimorphic.chirp.main.MainEvent
 import com.asimorphic.chirp.main.MainViewModel
 import com.asimorphic.chirp.navigation.DeepLinkListener
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 import com.asimorphic.chirp.navigation.NavigationRoot
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.presentation.util.ObserveAsEvents
@@ -48,7 +47,7 @@ fun App(
             NavigationRoot(
                 navController = navController,
                 startDestination = if (state.isLoggedIn) {
-                    ChatMenuRoute
+                    ChatGraphRoutes.Graph
                 } else {
                     AuthGraphRoutes.Graph
                 }

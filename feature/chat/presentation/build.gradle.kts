@@ -17,6 +17,11 @@ kotlin {
                 implementation(projects.feature.chat.domain)
                 implementation(projects.core.domain)
                 implementation(projects.core.designsystem)
+
+                implementation(dependencyNotation = libs.material3.adaptive)
+                implementation(dependencyNotation = libs.material3.adaptive.layout)
+                implementation(dependencyNotation = libs.material3.adaptive.navigation)
+                implementation(dependencyNotation = libs.jetbrains.compose.backhandler)
             }
         }
 

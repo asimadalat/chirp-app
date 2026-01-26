@@ -1,0 +1,9 @@
+package com.asimorphic.chat.presentation.chat_menu_detail
+
+sealed interface ChatListDetailAction {
+    data class OnChatClick(val chatId: String?): ChatListDetailAction
+    data object OnCreateChatClick: ChatListDetailAction
+    data object OnManageChatClick: ChatListDetailAction
+    data object OnProfileSettingsClick: ChatListDetailAction
+    data object OnDismissCurrentDialog: ChatListDetailAction
+}
