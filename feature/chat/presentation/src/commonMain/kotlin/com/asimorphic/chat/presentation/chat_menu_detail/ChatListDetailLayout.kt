@@ -24,7 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asimorphic.chat.presentation.create_chat.CreateChatRoot
 import com.asimorphic.core.designsystem.theme.extended
+import com.asimorphic.core.presentation.util.DialogSheetScopedViewModel
 import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -61,6 +63,9 @@ fun ChatMenuDetailLayout(
                             text = "$chatIndex",
                             modifier = Modifier.clickable {
                                 chatListDetailViewModel.onAction(
+                                    action = ChatListDetailAction.OnCreateChatClick
+                                )
+                                chatListDetailViewModel.onAction(
                                     action = ChatListDetailAction.OnChatClick(chatId = chatIndex.toString())
                                 )
                                 scope.launch {
@@ -89,4 +94,10 @@ fun ChatMenuDetailLayout(
             }
         }
     )
+
+    DialogSheetScopedViewModel(
+        isVisible = sharedState.dialogState is ChatMenuDetailDialogState.CreateChat
+    ) {
+        CreateChatRoot()
+    }
 }

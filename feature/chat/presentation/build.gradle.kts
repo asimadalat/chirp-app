@@ -22,6 +22,9 @@ kotlin {
                 implementation(dependencyNotation = libs.material3.adaptive.layout)
                 implementation(dependencyNotation = libs.material3.adaptive.navigation)
                 implementation(dependencyNotation = libs.jetbrains.compose.backhandler)
+
+                implementation(dependencyNotation = compose.components.resources)
+                implementation(dependencyNotation = compose.components.uiToolingPreview)
             }
         }
 
