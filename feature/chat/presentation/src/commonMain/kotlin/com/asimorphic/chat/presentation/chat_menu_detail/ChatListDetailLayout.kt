@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
@@ -24,10 +28,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import chirp.feature.chat.presentation.generated.resources.Res
+import chirp.feature.chat.presentation.generated.resources.create_chat
 import com.asimorphic.chat.presentation.create_chat.CreateChatRoot
+import com.asimorphic.core.designsystem.component.button.ChirpFloatingActionButton
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.util.DialogSheetScopedViewModel
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -55,26 +63,40 @@ fun ChatMenuDetailLayout(
         ),
         listPane = {
             AnimatedPane {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(count = 100) { chatIndex ->
-                        Text(
-                            text = "$chatIndex",
-                            modifier = Modifier.clickable {
-                                chatListDetailViewModel.onAction(
-                                    action = ChatListDetailAction.OnCreateChatClick
-                                )
-                                chatListDetailViewModel.onAction(
-                                    action = ChatListDetailAction.OnChatClick(chatId = chatIndex.toString())
-                                )
-                                scope.launch {
-                                    scaffoldNavigator.navigateTo(
-                                        pane = ListDetailPaneScaffoldRole.Detail
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    floatingActionButton = {
+                        ChirpFloatingActionButton(
+                            onClick =  {
+                                chatListDetailViewModel.onAction(action = ChatListDetailAction.OnCreateChatClick)
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = stringResource(resource = Res.string.create_chat)
+                            )
+                        }
+                    }
+                ) { paddingValues ->
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = paddingValues
+                    ) {
+                        items(count = 100) { chatIndex ->
+                            Text(
+                                text = "$chatIndex",
+                                modifier = Modifier.clickable {
+                                    chatListDetailViewModel.onAction(
+                                        action = ChatListDetailAction.OnChatClick(chatId = chatIndex.toString())
                                     )
-                                }
-                            }.padding(all = 18.dp)
-                        )
+                                    scope.launch {
+                                        scaffoldNavigator.navigateTo(
+                                            pane = ListDetailPaneScaffoldRole.Detail
+                                        )
+                                    }
+                                }.padding(all = 18.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -100,7 +122,20 @@ fun ChatMenuDetailLayout(
     ) {
         CreateChatRoot(
             onDismiss = {
-                chatListDetailViewModel.onAction(action = ChatListDetailAction.OnDismissCurrentDialog)
+                chatListDetailViewModel.onAction(
+                    action = ChatListDetailAction.OnDismissCurrentDialog
+                )
+            },
+            onChatCreated = { chat ->
+                chatListDetailViewModel.onAction(
+                    action = ChatListDetailAction.OnDismissCurrentDialog
+                )
+                chatListDetailViewModel.onAction(
+                    action = ChatListDetailAction.OnChatClick(chatId = chat.id)
+                )
+                scope.launch {
+                    scaffoldNavigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
+                }
             }
         )
     }

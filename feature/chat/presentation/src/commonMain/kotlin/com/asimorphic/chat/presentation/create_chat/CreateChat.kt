@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.cancel
 import chirp.feature.chat.presentation.generated.resources.create_chat
+import com.asimorphic.chat.domain.model.Chat
 import com.asimorphic.chat.presentation.component.ChatParticipantSearchSection
 import com.asimorphic.chat.presentation.component.ChatParticipantSelectionSection
 import com.asimorphic.chat.presentation.component.ManageChatActionSection
@@ -31,6 +32,7 @@ import com.asimorphic.core.designsystem.component.button.ChirpButtonType
 import com.asimorphic.core.designsystem.component.layout.ChirpDialogSheetLayout
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
+import com.asimorphic.core.presentation.util.ObserveAsEvents
 import com.asimorphic.core.presentation.util.clearFocusOnTap
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import org.jetbrains.compose.resources.stringResource
@@ -40,9 +42,16 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun CreateChatRoot(
     onDismiss: () -> Unit,
+    onChatCreated: (Chat) -> Unit,
     viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(flow = viewModel.events) { event ->
+        when (event) {
+            is CreateChatEvent.OnChatCreated -> onChatCreated(event.chat)
+        }
+    }
 
     ChirpDialogSheetLayout(
         onDismiss = onDismiss
@@ -136,6 +145,7 @@ fun CreateChatScreen(
                     type = ChirpButtonType.SECONDARY
                 )
             },
+            error = state.createChatError?.asString(),
             modifier = Modifier.fillMaxWidth()
         )
     }
