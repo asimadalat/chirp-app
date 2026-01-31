@@ -1,6 +1,7 @@
 package com.asimorphic.chirp.di
 
 import com.asimorphic.auth.presentation.di.authPresentationModule
+import com.asimorphic.chat.data.di.chatDataModule
 import com.asimorphic.chat.presentation.di.chatPresentationModule
 import com.asimorphic.core.data.di.coreDataModule
 import com.asimorphic.core.presentation.di.corePresentationModule
@@ -14,6 +15,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             coreDataModule,
             corePresentationModule,
             authPresentationModule,
+            chatDataModule,
             chatPresentationModule,
             appModule
         )

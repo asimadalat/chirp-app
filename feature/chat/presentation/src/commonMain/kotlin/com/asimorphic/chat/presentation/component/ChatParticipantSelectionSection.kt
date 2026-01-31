@@ -10,15 +10,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.asimorphic.core.designsystem.component.profile_picture.ProfilePictureUi
+import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 
 @Composable
 fun ColumnScope.ChatParticipantSelectionSection(
-    selectedParticipants: List<ProfilePictureUi>,
+    selectedParticipants: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
-    searchResult: ProfilePictureUi? = null
+    searchResult: ChatParticipantUi? = null
 ) {
     val deviceScreenSizeType = currentDeviceScreenSizeType()
     val rootHeightModifier = when (deviceScreenSizeType) {

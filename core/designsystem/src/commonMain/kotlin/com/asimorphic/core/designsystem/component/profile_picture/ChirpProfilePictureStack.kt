@@ -12,7 +12,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ChirpProfilePictureStack(
     modifier: Modifier = Modifier,
-    profilePictures: List<ProfilePictureUi>,
+    profilePictures: List<ChatParticipantUi>,
     size: ProfilePictureSize = ProfilePictureSize.SMALL,
     maxVisibleCount: Int = 2,
     overlapPercentage: Float = 0.45f
@@ -55,24 +55,24 @@ fun ChirpProfilePictureStackPreview() {
     ChirpTheme {
         ChirpProfilePictureStack(
             profilePictures = listOf(
-                ProfilePictureUi(
+                ChatParticipantUi(
                     id = "0",
                     username = "Asim",
                     initials = "AS"
                 ),
-                ProfilePictureUi(
+                ChatParticipantUi(
                     id = "1",
                     username = "John",
                     initials = "JD"
-                ),ProfilePictureUi(
+                ),ChatParticipantUi(
                     id = "2",
                     username = "Chris",
                     initials = "CW"
-                ),ProfilePictureUi(
+                ),ChatParticipantUi(
                     id = "3",
                     username = "Jack",
                     initials = "JS"
-                ),ProfilePictureUi(
+                ),ChatParticipantUi(
                     id = "4",
                     username = "Hello",
                     initials = "HW"

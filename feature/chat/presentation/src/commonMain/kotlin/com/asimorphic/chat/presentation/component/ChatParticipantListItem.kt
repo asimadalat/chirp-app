@@ -13,13 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.asimorphic.core.designsystem.component.profile_picture.ChirpProfilePicture
-import com.asimorphic.core.designsystem.component.profile_picture.ProfilePictureUi
+import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.designsystem.theme.titleXSmall
 
 @Composable
 fun ChatParticipantListItem(
-    participantUi: ProfilePictureUi,
+    participantUi: ChatParticipantUi,
     modifier: Modifier = Modifier
 ) {
     Row(

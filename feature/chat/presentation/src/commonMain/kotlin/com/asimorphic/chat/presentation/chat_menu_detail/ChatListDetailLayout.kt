@@ -98,6 +98,10 @@ fun ChatMenuDetailLayout(
     DialogSheetScopedViewModel(
         isVisible = sharedState.dialogState is ChatMenuDetailDialogState.CreateChat
     ) {
-        CreateChatRoot()
+        CreateChatRoot(
+            onDismiss = {
+                chatListDetailViewModel.onAction(action = ChatListDetailAction.OnDismissCurrentDialog)
+            }
+        )
     }
 }

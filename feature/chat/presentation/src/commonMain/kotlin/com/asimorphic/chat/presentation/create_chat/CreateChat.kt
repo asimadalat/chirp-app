@@ -39,18 +39,23 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CreateChatRoot(
+    onDismiss: () -> Unit,
     viewModel: CreateChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ChirpDialogSheetLayout(
-        onDismiss = {
-            viewModel.onAction(action = CreateChatAction.OnDismissDialog)
-        }
+        onDismiss = onDismiss
     ) {
         CreateChatScreen(
             state = state,
-            onAction = viewModel::onAction
+            onAction = { action ->
+                when (action) {
+                    CreateChatAction.OnDismissDialog -> onDismiss()
+                    else -> Unit
+                }
+                viewModel.onAction(action = action)
+            }
         )
     }
 }
@@ -94,7 +99,7 @@ fun CreateChatScreen(
         ChatParticipantSearchSection(
             queryState = state.queryTextFieldState,
             isSearchEnabled = state.canAddParticipant,
-            isLoading = state.isAddingParticipants,
+            isLoading = state.isSearchingParticipants,
             onAddClick = {
                 onAction(CreateChatAction.OnAddClick)
             },

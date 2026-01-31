@@ -18,6 +18,10 @@ kotlin {
                 implementation(projects.feature.chat.database)
                 implementation(projects.feature.chat.domain)
                 implementation(projects.core.domain)
+                implementation(dependencyNotation = projects.core.data)
+
+                implementation(dependencyNotation = libs.bundles.ktor.common)
+                implementation(dependencyNotation = libs.koin.core)
             }
         }
 
