@@ -7,4 +7,8 @@
     <string name="error_participant_not_found">No participant found</string>
     <string name="manage_profile">Manage profile</string>
     <string name="logout">Logout</string>
+    <string name="no_messages">No messages</string>
+    <string name="no_messages_subtitle">Nothing here but vibes. Start chatting.</string>
+    <string name="confirm_logout">Confirm logout?</string>
+    <string name="confirm_logout_desc">You can sign back in anytime.</string>
 </resources>

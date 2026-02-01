@@ -1,4 +1,4 @@
-package com.asimorphic.chat.presentation.chat_menu
+package com.asimorphic.chat.presentation.chat_menu.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,11 +21,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ChatListHeader(
-    selfParticipant: ChatParticipantUi,
+    selfParticipant: ChatParticipantUi?,
     isMenuOpen: Boolean,
     onDismissMenu: () -> Unit,
     onUserProfilePictureClick: () -> Unit,
-    onProfileSettingsClick: () -> Unit,
+    onManageProfileClick: () -> Unit,
     onLogoutClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -51,7 +51,7 @@ fun ChatListHeader(
                 isMenuOpen = isMenuOpen,
                 onDismissMenu = onDismissMenu,
                 onClick = onUserProfilePictureClick,
-                onProfileSettingsClick = onProfileSettingsClick,
+                onProfileSettingsClick = onManageProfileClick,
                 onLogoutClick = onLogoutClick,
             )
         }
@@ -74,7 +74,7 @@ fun ChatListHeaderPreview() {
                 isMenuOpen = true,
                 onDismissMenu = {},
                 onUserProfilePictureClick = {},
-                onProfileSettingsClick = {},
+                onManageProfileClick = {},
                 onLogoutClick = {}
             )
         }

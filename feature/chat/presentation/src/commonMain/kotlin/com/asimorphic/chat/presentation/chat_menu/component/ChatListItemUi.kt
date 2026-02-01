@@ -1,4 +1,4 @@
-package com.asimorphic.chat.presentation.chat_menu
+package com.asimorphic.chat.presentation.chat_menu.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

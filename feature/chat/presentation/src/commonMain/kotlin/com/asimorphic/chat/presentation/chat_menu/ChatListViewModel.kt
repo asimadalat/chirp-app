@@ -2,18 +2,33 @@ package com.asimorphic.chat.presentation.chat_menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.asimorphic.core.domain.auth.SessionService
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 
-class ChatListViewModel(
-    private val sessionService: SessionService
-): ViewModel() {
+class ChatListViewModel : ViewModel() {
 
-    init {
-        viewModelScope.launch {
-            delay(timeMillis = 5000)
-            sessionService.set(null)
+    private var hasLoadedInitialData = false
+
+    private val _state = MutableStateFlow(ChatListState())
+    val state = _state
+        .onStart {
+            if (!hasLoadedInitialData) {
+                /** Load initial data here **/
+                hasLoadedInitialData = true
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = ChatListState()
+        )
+
+    fun onAction(action: ChatListAction) {
+        when (action) {
+            else -> Unit
         }
     }
+
 }

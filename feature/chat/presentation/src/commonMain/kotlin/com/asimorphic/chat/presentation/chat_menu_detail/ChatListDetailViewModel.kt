@@ -34,7 +34,7 @@ class ChatListDetailViewModel: ViewModel() {
                     ) }
                 }
             }
-            ChatListDetailAction.OnProfileSettingsClick -> {
+            ChatListDetailAction.OnManageProfileClick -> {
                 _state.update { it.copy(
                     dialogState = ChatMenuDetailDialogState.ProfileDialog
                 ) }

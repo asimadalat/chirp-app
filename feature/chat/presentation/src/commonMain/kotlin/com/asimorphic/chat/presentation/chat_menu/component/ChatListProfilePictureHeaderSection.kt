@@ -1,4 +1,4 @@
-package com.asimorphic.chat.presentation.chat_menu
+package com.asimorphic.chat.presentation.chat_menu.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ChatListProfilePictureHeaderSection(
-    selfParticipant: ChatParticipantUi,
+    selfParticipant: ChatParticipantUi?,
     isMenuOpen: Boolean,
     onDismissMenu: () -> Unit,
     onClick: () -> Unit,
@@ -40,11 +40,13 @@ fun ChatListProfilePictureHeaderSection(
     Box(
         modifier = modifier
     ) {
-        ChirpProfilePicture(
-            displayText = selfParticipant.initials,
-            imageUrl = selfParticipant.imageUrl,
-            onClick = onClick
-        )
+        selfParticipant?.let {
+            ChirpProfilePicture(
+                displayText = selfParticipant.initials,
+                imageUrl = selfParticipant.imageUrl,
+                onClick = onClick
+            )
+        }
 
         DropdownMenu(
             expanded = isMenuOpen,
