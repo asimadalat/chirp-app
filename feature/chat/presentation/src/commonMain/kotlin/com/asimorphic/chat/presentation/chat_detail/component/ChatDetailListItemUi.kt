@@ -52,14 +52,6 @@ fun ChatDetailListItemUi(
 
 @Composable
 @Preview
-fun ChatDetailListItemUi() {
-    ChirpTheme {
-        ChatDetailListItemUi()
-    }
-}
-
-@Composable
-@Preview
 fun ChatDetailListItemSelfMessageSentUiPreview() {
     ChirpTheme {
         ChatDetailListItemUi(

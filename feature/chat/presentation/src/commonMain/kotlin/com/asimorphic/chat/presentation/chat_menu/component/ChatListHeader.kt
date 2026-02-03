@@ -51,7 +51,7 @@ fun ChatListHeader(
                 isMenuOpen = isMenuOpen,
                 onDismissMenu = onDismissMenu,
                 onClick = onUserProfilePictureClick,
-                onProfileSettingsClick = onManageProfileClick,
+                onManageProfileClick = onManageProfileClick,
                 onLogoutClick = onLogoutClick,
             )
         }
