@@ -16,4 +16,8 @@
     <string name="failed">Failed</string>
     <string name="delete">Delete</string>
     <string name="retry">Retry</string>
+    <string name="open_chat_options_menu">Open chat options menu</string>
+    <string name="go_back">Go back</string>
+    <string name="leave_chat">Leave chat</string>
+    <string name="people">People</string>
 </resources>

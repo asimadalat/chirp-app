@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.SpanStyle
@@ -23,12 +22,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.asimorphic.chat.domain.model.ChatMessage
+import com.asimorphic.chat.presentation.component.ChatItemHeaderRow
 import com.asimorphic.chat.presentation.model.ChatUi
 import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
-import com.asimorphic.core.designsystem.component.profile_picture.ChirpProfilePictureStack
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
-import com.asimorphic.core.designsystem.theme.titleXSmall
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.time.Clock
 
@@ -38,6 +36,8 @@ fun ChatListItemUi(
     isSelected: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val isGroupChat = chat.otherParticipants.size > 1
+
     Row(
         modifier = modifier
             .height(intrinsicSize = IntrinsicSize.Min)
@@ -56,36 +56,11 @@ fun ChatListItemUi(
             verticalArrangement = Arrangement
                 .spacedBy(space = 12.dp)
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement
-                    .spacedBy(space = 12.dp)
-            ) {
-                ChirpProfilePictureStack(
-                    profilePictures = chat.otherParticipants
-                )
-                Column(
-                    modifier = Modifier.weight(weight = 1f),
-                    verticalArrangement = Arrangement
-                        .spacedBy(space = 6.dp)
-                ) {
-                    Text(
-                        text = if (chat.otherParticipants.size == 1)
-                                    chat.otherParticipants.first().username
-                               else
-                                    chat.otherParticipants.take(n = 3)
-                                        .joinToString(separator = ", ")
-                                        { it.username },
-                        color = MaterialTheme.colorScheme.extended.textPrimary,
-                        style = MaterialTheme.typography.titleXSmall,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 1,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-            }
+            ChatItemHeaderRow(
+                chatUi = chat,
+                isGroupChat = isGroupChat,
+                modifier = Modifier.fillMaxWidth()
+            )
 
             if (chat.lastMessage != null) {
                 val previewMessage = buildAnnotatedString {
