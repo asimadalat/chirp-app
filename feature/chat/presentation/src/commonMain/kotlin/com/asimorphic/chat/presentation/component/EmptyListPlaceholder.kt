@@ -1,4 +1,4 @@
-package com.asimorphic.chat.presentation.chat_menu.component
+package com.asimorphic.chat.presentation.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -14,16 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.empty_chat
-import chirp.feature.chat.presentation.generated.resources.no_messages
-import chirp.feature.chat.presentation.generated.resources.no_messages_subtitle
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun EmptyChatPlaceholder(
+fun EmptyListPlaceholder(
+    title: String,
+    subtitle: String,
     modifier: Modifier = Modifier
 ) {
     val screenSizeType = currentDeviceScreenSizeType()
@@ -37,7 +36,7 @@ fun EmptyChatPlaceholder(
     ) {
         Image(
             painter = painterResource(resource = Res.drawable.empty_chat),
-            contentDescription = stringResource(resource = Res.string.no_messages),
+            contentDescription = title,
             modifier = Modifier.size(
                 size = if (screenSizeType == DeviceScreenSizeType.MOBILE_LANDSCAPE)
                            120.dp
@@ -47,12 +46,12 @@ fun EmptyChatPlaceholder(
         )
         Spacer(modifier = Modifier.height(height = 4.dp))
         Text(
-            text = stringResource(resource = Res.string.no_messages),
+            text =  title,
             color = MaterialTheme.colorScheme.extended.textPrimary,
             style = MaterialTheme.typography.titleMedium
         )
         Text(
-            text = stringResource(resource = Res.string.no_messages_subtitle),
+            text = subtitle,
             color = MaterialTheme.colorScheme.extended.textSecondary,
             style = MaterialTheme.typography.bodyMedium
         )

@@ -31,9 +31,11 @@ import chirp.feature.chat.presentation.generated.resources.confirm_logout
 import chirp.feature.chat.presentation.generated.resources.confirm_logout_desc
 import chirp.feature.chat.presentation.generated.resources.create_chat
 import chirp.feature.chat.presentation.generated.resources.logout
+import chirp.feature.chat.presentation.generated.resources.no_chats
+import chirp.feature.chat.presentation.generated.resources.no_chats_subtitle
 import com.asimorphic.chat.presentation.chat_menu.component.ChatListHeader
 import com.asimorphic.chat.presentation.chat_menu.component.ChatListItemUi
-import com.asimorphic.chat.presentation.chat_menu.component.EmptyChatPlaceholder
+import com.asimorphic.chat.presentation.component.EmptyListPlaceholder
 import com.asimorphic.chat.presentation.model.ChatUi
 import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.button.ChirpFloatingActionButton
@@ -117,7 +119,9 @@ fun ChatListScreen(
                     )
                 }
                 state.chats.isEmpty() -> {
-                    EmptyChatPlaceholder(
+                    EmptyListPlaceholder(
+                        title = stringResource(resource = Res.string.no_chats),
+                        subtitle = stringResource(resource = Res.string.no_chats_subtitle),
                         modifier = Modifier
                             .weight(weight = 1f)
                             .fillMaxWidth()

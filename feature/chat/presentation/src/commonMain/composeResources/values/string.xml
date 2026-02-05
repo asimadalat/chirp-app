@@ -7,8 +7,10 @@
     <string name="error_participant_not_found">No participant found</string>
     <string name="manage_profile">Manage profile</string>
     <string name="logout">Logout</string>
+    <string name="no_chats">No chats</string>
+    <string name="no_chats_subtitle">Nothing here but vibes. Start chatting.</string>
     <string name="no_messages">No messages</string>
-    <string name="no_messages_subtitle">Nothing here but vibes. Start chatting.</string>
+    <string name="no_messages_subtitle">Your future messages live here</string>
     <string name="confirm_logout">Confirm logout?</string>
     <string name="confirm_logout_desc">You can sign back in anytime.</string>
     <string name="sending">Sending...</string>
@@ -20,4 +22,11 @@
     <string name="go_back">Go back</string>
     <string name="leave_chat">Leave chat</string>
     <string name="people">People</string>
+    <string name="send_a_message">Send a message</string>
+    <string name="send">Send</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="reconnecting">Reconnecting...</string>
+    <string name="error_network">Network error</string>
+    <string name="error_unknown">Unknown error</string>
 </resources>

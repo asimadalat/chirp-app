@@ -20,11 +20,13 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun ChirpIconButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
+    enabled: Boolean = true,
+    content: @Composable () -> Unit,
 ) {
     OutlinedIconButton(
         modifier = modifier
             .size(size = 45.dp),
+        enabled = enabled,
         onClick = onClick,
         shape = RoundedCornerShape(size = 10.dp),
         border = BorderStroke(
