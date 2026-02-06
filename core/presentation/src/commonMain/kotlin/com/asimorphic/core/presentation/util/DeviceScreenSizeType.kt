@@ -18,6 +18,9 @@ enum class DeviceScreenSizeType {
     val isMobileView: Boolean get() =
         this in listOf<DeviceScreenSizeType>(MOBILE_PORTRAIT, MOBILE_LANDSCAPE)
 
+    val isWideView: Boolean get() =
+        this in listOf(TABLET_LANDSCAPE, DESKTOP)
+
     companion object {
         fun fromWindowSizeClass(
             windowSizeClass: WindowSizeClass

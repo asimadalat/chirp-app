@@ -1,7 +1,9 @@
 package com.asimorphic.chat.presentation.chat_detail.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -23,7 +25,7 @@ fun ChatMessageList(
     listState: LazyListState,
     onMessageLongClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onMessageRetryClick: (MessageUi.SelfParticipantMessage) -> Unit,
-    onDeletMessageClick: (MessageUi.SelfParticipantMessage) -> Unit,
+    onDeleteMessageClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onDismissMessageMenu: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -41,14 +43,28 @@ fun ChatMessageList(
         LazyColumn(
             modifier = modifier,
             state = listState,
-            contentPadding = PaddingValues(all = 16.dp),
-            reverseLayout = true
+            contentPadding = PaddingValues(
+                all = 16.dp
+            ),
+            reverseLayout = true,
+            verticalArrangement = Arrangement
+                .spacedBy(
+                    space = 18.dp
+                ),
         ) {
             items(
                 items = messages,
                 key = { it.id }
             ) { message ->
-                // TODO: Finish list items
+              ChatDetailListItemUi(
+                  messageUi = message,
+                  onMessageLongClick = onMessageLongClick,
+                  onDismissMessageMenu = onDismissMessageMenu,
+                  onDeleteClick = onDeleteMessageClick,
+                  onRetryClick = onMessageRetryClick,
+                  modifier = Modifier.fillMaxWidth()
+                      .animateItem()
+              )
             }
         }
     }

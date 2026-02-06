@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
@@ -41,7 +42,7 @@ import kotlin.time.Clock
 
 @Composable
 fun ChatDetailHeader(
-    chatUi: ChatUi,
+    chatUi: ChatUi?,
     isChatListPresent: Boolean,
     isMenuDropdownOpen: Boolean,
     onChatOptionsClick: () -> Unit,
@@ -51,8 +52,6 @@ fun ChatDetailHeader(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val isGroupChat = chatUi.otherParticipants.size > 1
-
     Row(
         modifier = modifier.fillMaxWidth()
             .background(
@@ -75,17 +74,23 @@ fun ChatDetailHeader(
             }
         }
 
-        ChatItemHeaderRow(
-            chatUi = chatUi,
-            isGroupChat = isGroupChat,
-            modifier = Modifier
-                .weight(
-                    weight = 1f
-                )
-                .clickable {
-                    onManageChatClick()
-                }
-        )
+        if (chatUi != null) {
+            val isGroupChat = chatUi.otherParticipants.size > 1
+
+            ChatItemHeaderRow(
+                chatUi = chatUi,
+                isGroupChat = isGroupChat,
+                modifier = Modifier
+                    .weight(
+                        weight = 1f
+                    )
+                    .clickable {
+                        onManageChatClick()
+                    }
+            )
+        } else {
+            Spacer(modifier = Modifier.weight(weight = 1f))
+        }
 
         Box {
             ChirpIconButton(

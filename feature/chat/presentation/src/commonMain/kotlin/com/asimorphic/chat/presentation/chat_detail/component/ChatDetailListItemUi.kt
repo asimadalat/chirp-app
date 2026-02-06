@@ -16,10 +16,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ChatDetailListItemUi(
     messageUi: MessageUi,
-    onMessageLongClick: () -> Unit,
+    onMessageLongClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onDismissMessageMenu: () -> Unit,
-    onDeleteClick: () -> Unit,
-    onRetryClick: () -> Unit,
+    onDeleteClick: (MessageUi.SelfParticipantMessage) -> Unit,
+    onRetryClick: (MessageUi.SelfParticipantMessage) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -40,10 +40,16 @@ fun ChatDetailListItemUi(
             is MessageUi.SelfParticipantMessage -> {
                 SelfParticipantMessageUi(
                     message = messageUi,
-                    onMessageLongClick = onMessageLongClick,
+                    onMessageLongClick = {
+                        onMessageLongClick(messageUi)
+                    },
                     onDismissMessageMenu = onDismissMessageMenu,
-                    onDeleteClick = onDeleteClick,
-                    onRetryClick = onRetryClick
+                    onDeleteClick =  {
+                        onDeleteClick(messageUi)
+                    },
+                    onRetryClick = {
+                        onRetryClick(messageUi)
+                    }
                 )
             }
         }
