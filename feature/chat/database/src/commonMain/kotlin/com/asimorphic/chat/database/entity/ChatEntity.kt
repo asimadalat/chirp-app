@@ -3,7 +3,9 @@ package com.asimorphic.chat.database.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity
+@Entity(
+    tableName = "chat_entity"
+)
 data class ChatEntity(
     @PrimaryKey
     val id: String,
