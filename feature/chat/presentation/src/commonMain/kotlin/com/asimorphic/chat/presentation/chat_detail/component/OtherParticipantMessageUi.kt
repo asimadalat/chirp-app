@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.asimorphic.chat.presentation.model.MessageUi
 import com.asimorphic.core.designsystem.component.chat.ChirpChatBubble
@@ -15,6 +16,7 @@ import com.asimorphic.core.designsystem.component.profile_picture.ChirpProfilePi
 @Composable
 fun OtherParticipantMessageUi(
     message: MessageUi.OtherParticipantMessage,
+    color: Color,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -32,6 +34,7 @@ fun OtherParticipantMessageUi(
             from = message.sender.username,
             formattedTimestamp = message.formattedSentTime.asString(),
             triangleAlign = TriangleAlign.LEFT,
+            color = color
         )
     }
 }

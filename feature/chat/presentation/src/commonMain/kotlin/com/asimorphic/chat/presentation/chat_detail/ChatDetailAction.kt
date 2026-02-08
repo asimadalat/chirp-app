@@ -3,7 +3,7 @@ package com.asimorphic.chat.presentation.chat_detail
 import com.asimorphic.chat.presentation.model.MessageUi
 
 sealed interface ChatDetailAction {
-    data class OnSelectChat(val chatId: String): ChatDetailAction
+    data class OnSelectChat(val chatId: String?): ChatDetailAction
 
     data class OnDeleteMessageClick(
         val message: MessageUi.SelfParticipantMessage

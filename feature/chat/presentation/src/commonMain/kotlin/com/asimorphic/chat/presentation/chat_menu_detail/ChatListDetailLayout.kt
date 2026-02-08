@@ -3,23 +3,22 @@
 package com.asimorphic.chat.presentation.chat_menu_detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.layout.PaneAdaptedValue
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asimorphic.chat.presentation.chat_detail.ChatDetailRoot
 import com.asimorphic.chat.presentation.chat_menu.ChatListRoot
 import com.asimorphic.chat.presentation.create_chat.CreateChatRoot
 import com.asimorphic.core.designsystem.theme.extended
@@ -43,6 +42,19 @@ fun ChatListDetailLayout(
         scope.launch {
             scaffoldNavigator.navigateBack()
         }
+    }
+
+    val detailPane = scaffoldNavigator
+        .scaffoldValue[ListDetailPaneScaffoldRole.Detail]
+
+    LaunchedEffect(
+        key1 = detailPane,
+        key2 = sharedState.selectedChatId
+    ) {
+        if (detailPane == PaneAdaptedValue.Hidden)
+            chatListDetailViewModel.onAction(
+                action = ChatListDetailAction.OnChatClick(chatId = null)
+            )
     }
 
     ListDetailPaneScaffold(
@@ -80,16 +92,19 @@ fun ChatListDetailLayout(
         },
         detailPane = {
             AnimatedPane {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    sharedState.selectedChatId?.let {
-                        Text(
-                            text = it
-                        )
+                val listPane = scaffoldNavigator
+                    .scaffoldValue[ListDetailPaneScaffoldRole.List]
+                ChatDetailRoot(
+                    chatId = sharedState.selectedChatId,
+                    isChatListPresent = listPane == PaneAdaptedValue.Expanded
+                            && detailPane == PaneAdaptedValue.Expanded,
+                    onNavigateBack = {
+                        scope.launch {
+                            if (scaffoldNavigator.canNavigateBack())
+                                scaffoldNavigator.navigateBack()
+                        }
                     }
-                }
+                )
             }
         }
     )

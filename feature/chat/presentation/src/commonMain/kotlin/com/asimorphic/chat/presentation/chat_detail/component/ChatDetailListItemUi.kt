@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.chat.presentation.model.MessageUi
+import com.asimorphic.chat.presentation.util.getChatBubbleColourForUser
 import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.presentation.util.UiText
@@ -34,7 +35,10 @@ fun ChatDetailListItemUi(
             }
             is MessageUi.OtherParticipantMessage -> {
                 OtherParticipantMessageUi(
-                    message = messageUi
+                    message = messageUi,
+                    color = getChatBubbleColourForUser(
+                        userId = messageUi.sender.id
+                    )
                 )
             }
             is MessageUi.SelfParticipantMessage -> {
