@@ -2,8 +2,10 @@ package com.asimorphic.chat.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.asimorphic.chat.database.entity.ChatEntity
+import com.asimorphic.chat.database.entity.ChatParticipantCrossRef
 import com.asimorphic.chat.database.entity.ChatParticipantEntity
 import com.asimorphic.chat.database.relation.ChatWithMeta
 import com.asimorphic.chat.database.relation.ChatWithParticipants
@@ -49,4 +51,75 @@ interface ChatDao {
 
     @Query(value = "DELETE FROM chat_entity")
     suspend fun deleteAllChats()
+
+    @Transaction
+    suspend fun upsertChatWithParticipantsAndCrossRefs(
+        chat: ChatEntity,
+        participants: List<ChatParticipantEntity>,
+        participantDao: ChatParticipantDao,
+        crossRefDao: ChatParticipantCrossRefDao
+    ) {
+        upsertChat(
+            chat = chat
+        )
+        participantDao.upsertParticipants(
+            participants = participants
+        )
+
+        val crossRefs = participants.map {
+            ChatParticipantCrossRef(
+                chatId = chat.id,
+                userId = it.userId,
+                isActive = true
+            )
+        }
+        crossRefDao.upsertCrossRefs(
+            crossRefs = crossRefs
+        )
+
+        crossRefDao.syncChatParticipants(
+            chatId = chat.id,
+            participants = participants
+        )
+    }
+
+    @Transaction
+    suspend fun upsertChatsWithParticipantsAndCrossRefs(
+        chats: List<ChatWithParticipants>,
+        participantDao: ChatParticipantDao,
+        crossRefDao: ChatParticipantCrossRefDao
+    ) {
+        upsertChats(
+            chats = chats.map {
+                it.chat
+            }
+        )
+
+        val allParticipantsFromChats = chats.flatMap {
+            it.participants
+        }
+        participantDao.upsertParticipants(
+            participants = allParticipantsFromChats
+        )
+
+        val allCrossRefsFromChats = chats.flatMap { chatWithParticipants ->
+            chatWithParticipants.participants.map { participantEntity ->
+                ChatParticipantCrossRef(
+                    chatId = chatWithParticipants.chat.id,
+                    userId = participantEntity.userId,
+                    isActive = true
+                )
+            }
+        }
+        crossRefDao.upsertCrossRefs(
+            crossRefs = allCrossRefsFromChats
+        )
+
+        chats.forEach { chatWithParticipants ->
+            crossRefDao.syncChatParticipants(
+                chatId = chatWithParticipants.chat.id,
+                participants = chatWithParticipants.participants
+            )
+        }
+    }
 }

@@ -11,6 +11,4 @@ data class ChatEntity(
     val id: String,
 
     val lastActivityAt: Long,
-
-    val lastMessage: String?
 )
