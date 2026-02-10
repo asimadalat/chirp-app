@@ -13,14 +13,14 @@ data class ChatWithMeta(
     val chat: ChatEntity,
 
     @Relation(
-        parentColumn = "id",
+        parentColumn = "chatId",
         entityColumn = "userId",
         associateBy = Junction(value = ChatParticipantCrossRef::class)
     )
     val participants: List<ChatParticipantEntity>,
 
     @Relation(
-        parentColumn = "id",
+        parentColumn = "chatId",
         entityColumn = "chatId",
         entity = ChatMessageEntity::class
     )

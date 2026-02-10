@@ -15,7 +15,7 @@ import androidx.room.DatabaseView
     """
 )
 data class LastMessageView(
-    val id: String,
+    val messageId: String,
     val chatId: String,
     val senderId: String,
     val content: String,

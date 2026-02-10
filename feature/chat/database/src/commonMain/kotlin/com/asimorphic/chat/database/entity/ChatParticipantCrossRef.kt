@@ -2,6 +2,7 @@ package com.asimorphic.chat.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 
 @Entity(
     tableName = "chat_participant_cross_ref",
@@ -12,7 +13,7 @@ import androidx.room.ForeignKey
     foreignKeys = [
         ForeignKey(
             entity = ChatEntity::class,
-            parentColumns = ["id"],
+            parentColumns = ["chatId"],
             childColumns = ["chatId"],
             onDelete = ForeignKey.CASCADE
         ),
@@ -22,6 +23,10 @@ import androidx.room.ForeignKey
             childColumns = ["userId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["chatId"]),
+        Index(value = ["userId"])
     ]
 )
 data class ChatParticipantCrossRef(

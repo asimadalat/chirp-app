@@ -14,8 +14,8 @@ interface ChatMessageDao {
     @Upsert
     suspend fun upsertMessages(messages: List<ChatMessageEntity>)
 
-    @Query("SELECT * FROM chat_message_entity WHERE id = :id")
-    suspend fun getMessageById(id: String): ChatMessageEntity?
+    @Query("SELECT * FROM chat_message_entity WHERE messageId = :messageId")
+    suspend fun getMessageById(messageId: String): ChatMessageEntity?
 
     @Query(value = """
         SELECT * FROM chat_message_entity 
@@ -24,9 +24,9 @@ interface ChatMessageDao {
     """)
     fun getMessagesByChatId(chatId: String): Flow<List<ChatMessageEntity>>
 
-    @Query(value = "DELETE FROM chat_message_entity WHERE id = :id")
-    suspend fun deleteMessageById(id: String)
+    @Query(value = "DELETE FROM chat_message_entity WHERE messageId = :messageId")
+    suspend fun deleteMessageById(messageId: String)
 
-    @Query(value = "DELETE FROM chat_message_entity WHERE id IN (:ids)")
-    suspend fun deleteMessagesByIds(ids: List<String>)
+    @Query(value = "DELETE FROM chat_message_entity WHERE messageId IN (:messageIds)")
+    suspend fun deleteMessagesByIds(messageIds: List<String>)
 }

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 )
 data class ChatEntity(
     @PrimaryKey
-    val id: String,
+    val chatId: String,
 
     val lastActivityAt: Long,
 )

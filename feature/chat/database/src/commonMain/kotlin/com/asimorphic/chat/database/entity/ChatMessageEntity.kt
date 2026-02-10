@@ -2,6 +2,7 @@ package com.asimorphic.chat.database.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -9,15 +10,19 @@ import androidx.room.PrimaryKey
     foreignKeys = [
         ForeignKey(
             entity = ChatEntity::class,
-            parentColumns = ["id"],
+            parentColumns = ["chatId"],
             childColumns = ["chatId"],
             onDelete = ForeignKey.CASCADE
         )
+    ],
+    indices = [
+        Index(value = ["chatId"]),
+        Index(value = ["sentAt"])
     ]
 )
 data class ChatMessageEntity(
     @PrimaryKey
-    val id: String,
+    val messageId: String,
 
     val chatId: String,
 

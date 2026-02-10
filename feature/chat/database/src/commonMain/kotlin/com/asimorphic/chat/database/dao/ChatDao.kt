@@ -19,16 +19,19 @@ interface ChatDao {
     @Upsert
     suspend fun upsertChats(chats: List<ChatEntity>)
 
-    @Query(value = "SELECT * FROM chat_entity WHERE id = :id")
-    suspend fun getChatById(id: String): ChatWithParticipants?
+    @Query(value = "SELECT * FROM chat_entity WHERE chatId = :chatId")
+    @Transaction
+    suspend fun getChatById(chatId: String): ChatWithParticipants?
 
-    @Query(value = "SELECT * FROM chat_entity WHERE id = :id")
-    suspend fun getChatWithMetaById(id: String): Flow<ChatWithMeta?>
+    @Query(value = "SELECT * FROM chat_entity WHERE chatId = :chatId")
+    @Transaction
+    fun getChatWithMetaById(chatId: String): Flow<ChatWithMeta?>
 
-    @Query(value = "SELECT id FROM chat_entity")
+    @Query(value = "SELECT chatId FROM chat_entity")
     fun getAllChatIds(): List<String>
 
     @Query(value = "SELECT * FROM chat_entity ORDER BY lastActivityAt DESC")
+    @Transaction
     fun getChatsWithParticipants(): Flow<List<ChatWithParticipants>>
 
     @Query(value = "SELECT COUNT(*) FROM chat_entity")
@@ -38,16 +41,16 @@ interface ChatDao {
         SELECT p.*
         FROM chat_participant_entity p
         JOIN chat_participant_cross_ref cpcr ON p.userId = cpcr.userId
-        WHERE cpcr.chatId = :id AND cpcr.isActive = true
+        WHERE cpcr.chatId = :chatId AND cpcr.isActive = true
         ORDER BY p.username
     """)
-    fun getActiveParticipantsByChatId(id: String): Flow<List<ChatParticipantEntity>>
+    fun getActiveParticipantsByChatId(chatId: String): Flow<List<ChatParticipantEntity>>
 
-    @Query(value = "DELETE FROM chat_entity WHERE id = :id")
-    suspend fun deleteChatById(id: String)
+    @Query(value = "DELETE FROM chat_entity WHERE chatId = :chatId")
+    suspend fun deleteChatById(chatId: String)
 
-    @Query(value = "DELETE FROM chat_entity WHERE id IN (:ids)")
-    suspend fun deleteChatsByIds(ids: List<String>)
+    @Query(value = "DELETE FROM chat_entity WHERE chatId IN (:chatIds)")
+    suspend fun deleteChatsByIds(chatIds: List<String>)
 
     @Query(value = "DELETE FROM chat_entity")
     suspend fun deleteAllChats()
@@ -68,7 +71,7 @@ interface ChatDao {
 
         val crossRefs = participants.map {
             ChatParticipantCrossRef(
-                chatId = chat.id,
+                chatId = chat.chatId,
                 userId = it.userId,
                 isActive = true
             )
@@ -78,7 +81,7 @@ interface ChatDao {
         )
 
         crossRefDao.syncChatParticipants(
-            chatId = chat.id,
+            chatId = chat.chatId,
             participants = participants
         )
     }
@@ -105,7 +108,7 @@ interface ChatDao {
         val allCrossRefsFromChats = chats.flatMap { chatWithParticipants ->
             chatWithParticipants.participants.map { participantEntity ->
                 ChatParticipantCrossRef(
-                    chatId = chatWithParticipants.chat.id,
+                    chatId = chatWithParticipants.chat.chatId,
                     userId = participantEntity.userId,
                     isActive = true
                 )
@@ -117,7 +120,7 @@ interface ChatDao {
 
         chats.forEach { chatWithParticipants ->
             crossRefDao.syncChatParticipants(
-                chatId = chatWithParticipants.chat.id,
+                chatId = chatWithParticipants.chat.chatId,
                 participants = chatWithParticipants.participants
             )
         }

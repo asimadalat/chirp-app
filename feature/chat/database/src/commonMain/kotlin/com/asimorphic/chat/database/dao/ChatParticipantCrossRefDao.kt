@@ -14,13 +14,13 @@ interface ChatParticipantCrossRefDao {
 
     @Query(value = """
         SELECT userId FROM chat_participant_cross_ref 
-        WHERE chatId == chatId
+        WHERE chatId == :chatId
     """)
     suspend fun getAllParticipantIdsByChatId(chatId: String): List<String>
 
     @Query(value = """
         SELECT userId FROM chat_participant_cross_ref 
-        WHERE chatId == chatId AND isActive == true
+        WHERE chatId == :chatId AND isActive == true
     """)
     suspend fun getActiveParticipantIdsByChatId(chatId: String): List<String>
 
