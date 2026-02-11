@@ -239,7 +239,8 @@ private fun ChatDetailMessagesPreview() {
                         chatId = "0",
                         content = "The quick brown fox jumped over the lazy dog.",
                         createdAt = Clock.System.now(),
-                        senderId = "0"
+                        senderId = "0",
+                        deliveryStatus = ChatMessageDeliveryStatus.SENT
                     ),
                     lastMessageSender = "Asim"
                 ),

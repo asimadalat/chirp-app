@@ -5,7 +5,7 @@ import androidx.room.Relation
 import com.asimorphic.chat.database.entity.ChatMessageEntity
 import com.asimorphic.chat.database.entity.ChatParticipantEntity
 
-data class ChatMessageWithSender(
+data class ChatMessageWithSenderRelation(
     @Embedded
     val message: ChatMessageEntity,
 

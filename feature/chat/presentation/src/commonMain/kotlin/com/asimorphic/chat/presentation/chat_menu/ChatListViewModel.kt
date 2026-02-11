@@ -2,20 +2,42 @@ package com.asimorphic.chat.presentation.chat_menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asimorphic.chat.domain.chat.ChatRepository
+import com.asimorphic.chat.presentation.mapper.toUi
+import com.asimorphic.core.domain.auth.SessionService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class ChatListViewModel : ViewModel() {
+class ChatListViewModel(
+    private val chatRepository: ChatRepository,
+    private val sessionService: SessionService
+) : ViewModel() {
 
     private var hasLoadedInitialData = false
 
     private val _state = MutableStateFlow(ChatListState())
-    val state = _state
+    val state = combine(
+        flow = _state,
+        flow2 = chatRepository.getChats(),
+        flow3 = sessionService.observeAuthCredential()
+    ) { currentState, chats, authCredential ->
+        if (authCredential == null)
+            return@combine ChatListState()
+
+        currentState.copy(
+            chats = chats.map {
+                it.toUi(selfParticipantId = authCredential.user.id)
+            },
+            selfParticipant = authCredential.user.toUi()
+        )
+    }
         .onStart {
             if (!hasLoadedInitialData) {
-                /** Load initial data here **/
+                loadChats()
                 hasLoadedInitialData = true
             }
         }
@@ -31,4 +53,9 @@ class ChatListViewModel : ViewModel() {
         }
     }
 
+    private fun loadChats() {
+        viewModelScope.launch {
+            chatRepository.fetchChats()
+        }
+    }
 }

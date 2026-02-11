@@ -8,7 +8,7 @@ import com.asimorphic.chat.database.entity.ChatMessageEntity
 import com.asimorphic.chat.database.entity.ChatParticipantCrossRef
 import com.asimorphic.chat.database.entity.ChatParticipantEntity
 
-data class ChatWithMeta(
+data class ChatWithMetaRelation(
     @Embedded
     val chat: ChatEntity,
 
@@ -24,5 +24,5 @@ data class ChatWithMeta(
         entityColumn = "chatId",
         entity = ChatMessageEntity::class
     )
-    val chatMessagesWithSenders: List<ChatMessageWithSender>
+    val chatMessagesWithSenders: List<ChatMessageWithSenderRelation>
 )

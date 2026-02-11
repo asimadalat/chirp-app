@@ -8,7 +8,7 @@ import com.asimorphic.chat.database.entity.ChatParticipantCrossRef
 import com.asimorphic.chat.database.entity.ChatParticipantEntity
 import com.asimorphic.chat.database.view.LastMessageView
 
-data class ChatWithParticipants(
+data class ChatWithParticipantsRelation(
     @Embedded
     val chat: ChatEntity,
 

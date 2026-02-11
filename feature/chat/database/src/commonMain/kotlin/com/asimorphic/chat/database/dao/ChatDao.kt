@@ -5,10 +5,11 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
 import com.asimorphic.chat.database.entity.ChatEntity
+import com.asimorphic.chat.database.entity.ChatMessageEntity
 import com.asimorphic.chat.database.entity.ChatParticipantCrossRef
 import com.asimorphic.chat.database.entity.ChatParticipantEntity
-import com.asimorphic.chat.database.relation.ChatWithMeta
-import com.asimorphic.chat.database.relation.ChatWithParticipants
+import com.asimorphic.chat.database.relation.ChatWithMetaRelation
+import com.asimorphic.chat.database.relation.ChatWithParticipantsRelation
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,18 +22,33 @@ interface ChatDao {
 
     @Query(value = "SELECT * FROM chat_entity WHERE chatId = :chatId")
     @Transaction
-    suspend fun getChatById(chatId: String): ChatWithParticipants?
+    suspend fun getChatById(chatId: String): ChatWithParticipantsRelation?
 
-    @Query(value = "SELECT * FROM chat_entity WHERE chatId = :chatId")
+    @Query(value = """
+        SELECT c.*
+        FROM chat_entity c
+        JOIN chat_participant_cross_ref cpcr ON c.chatId = cpcr.chatId
+        WHERE c.chatId = :chatId AND cpcr.isActive = true
+    """)
     @Transaction
-    fun getChatWithMetaById(chatId: String): Flow<ChatWithMeta?>
+    fun getChatWithMetaById(chatId: String): Flow<ChatWithMetaRelation?>
 
     @Query(value = "SELECT chatId FROM chat_entity")
     fun getAllChatIds(): List<String>
 
     @Query(value = "SELECT * FROM chat_entity ORDER BY lastActivityAt DESC")
     @Transaction
-    fun getChatsWithParticipants(): Flow<List<ChatWithParticipants>>
+    fun getChatsWithParticipants(): Flow<List<ChatWithParticipantsRelation>>
+
+    @Query(value = """
+        SELECT DISTINCT c.*
+        FROM chat_entity c
+        JOIN chat_participant_cross_ref cpcr ON c.chatId
+        WHERE cpcr.isActive = true
+        ORDER BY lastActivityAt DESC
+    """)
+    @Transaction
+    fun getChatsWithActiveParticipants(): Flow<List<ChatWithParticipantsRelation>>
 
     @Query(value = "SELECT COUNT(*) FROM chat_entity")
     fun getChatCount(): Flow<Int>
@@ -88,15 +104,35 @@ interface ChatDao {
 
     @Transaction
     suspend fun upsertChatsWithParticipantsAndCrossRefs(
-        chats: List<ChatWithParticipants>,
+        chats: List<ChatWithParticipantsRelation>,
         participantDao: ChatParticipantDao,
-        crossRefDao: ChatParticipantCrossRefDao
+        crossRefDao: ChatParticipantCrossRefDao,
+        messageDao: ChatMessageDao
     ) {
         upsertChats(
             chats = chats.map {
                 it.chat
             }
         )
+
+        val clientChatIds = getAllChatIds()
+        val serverChatIds = chats.map { it.chat.chatId }
+        val staleChatIds = clientChatIds - serverChatIds.toSet()
+
+        chats.forEach { chatWithParticipants ->
+            chatWithParticipants.lastMessage?.run {
+                messageDao.upsertMessage(
+                    message = ChatMessageEntity(
+                        messageId = messageId,
+                        chatId = chatId,
+                        senderId = senderId,
+                        content = content,
+                        sentAt = sentAt,
+                        deliveryStatus = deliveryStatus,
+                    )
+                )
+            }
+        }
 
         val allParticipantsFromChats = chats.flatMap {
             it.participants
@@ -124,5 +160,9 @@ interface ChatDao {
                 participants = chatWithParticipants.participants
             )
         }
+
+        deleteChatsByIds(
+            chatIds = staleChatIds
+        )
     }
 }

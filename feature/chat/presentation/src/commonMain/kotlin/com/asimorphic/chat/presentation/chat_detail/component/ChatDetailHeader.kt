@@ -27,6 +27,7 @@ import chirp.feature.chat.presentation.generated.resources.leave_chat
 import chirp.feature.chat.presentation.generated.resources.open_chat_options_menu
 import chirp.feature.chat.presentation.generated.resources.people
 import com.asimorphic.chat.domain.model.ChatMessage
+import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.chat.presentation.component.ChatHeader
 import com.asimorphic.chat.presentation.component.ChatItemHeaderRow
 import com.asimorphic.chat.presentation.model.ChatUi
@@ -170,7 +171,8 @@ fun ChatDetailHeaderPreview() {
                                     "from the Chirp application. It is too lengthy to show entirely in" +
                                     "preview so will be ellipsised",
                             createdAt = Clock.System.now(),
-                            senderId = "0"
+                            senderId = "0",
+                            deliveryStatus = ChatMessageDeliveryStatus.SENT
                         ),
                         lastMessageSender = "Asim",
                     ),
