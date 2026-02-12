@@ -1,6 +1,5 @@
 package com.asimorphic.core.designsystem.component.button
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -19,7 +17,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.asimorphic.core.designsystem.theme.ChirpTheme
-import com.asimorphic.core.designsystem.theme.extended
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -32,60 +29,13 @@ fun ChirpButton(
     isLoading: Boolean = false,
     startIcon: @Composable (() -> Unit)? = null
 ) {
-    val colors = when (type) {
-        ChirpButtonType.PRIMARY -> ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary,
-            disabledContainerColor = MaterialTheme.colorScheme.extended.disabledFill,
-            disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
-        )
-        ChirpButtonType.SECONDARY -> ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.extended.textSecondary,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
-        )
-        ChirpButtonType.DESTRUCTIVE_PRIMARY -> ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.error,
-            contentColor = MaterialTheme.colorScheme.onError,
-            disabledContainerColor = MaterialTheme.colorScheme.extended.disabledFill,
-            disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
-        )
-        ChirpButtonType.DESTRUCTIVE_SECONDARY -> ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.error,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
-        )
-        ChirpButtonType.TEXT -> ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent,
-            contentColor = MaterialTheme.colorScheme.tertiary,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = MaterialTheme.colorScheme.extended.textDisabled
-        )
-    }
-
-    val defaultBorder = BorderStroke(
-        width = 1.dp,
-        color = MaterialTheme.colorScheme.extended.disabledOutline
+    val colors = ChirpButtonDefaults.buttonColors(
+        type = type
     )
-    val borders = when {
-        type == ChirpButtonType.PRIMARY && !enabled -> defaultBorder
-        type == ChirpButtonType.SECONDARY -> defaultBorder
-        type == ChirpButtonType.DESTRUCTIVE_PRIMARY && !enabled -> defaultBorder
-        type == ChirpButtonType.DESTRUCTIVE_SECONDARY -> {
-            val borderColour = if (enabled) {
-                MaterialTheme.colorScheme.extended.destructiveSecondaryOutline
-            } else {
-                MaterialTheme.colorScheme.extended.disabledOutline
-            }
-            BorderStroke(
-                width = 1.dp,
-                color = borderColour
-            )
-        }
-        else -> null
-    }
+    val borders = ChirpButtonDefaults.border(
+        type = type,
+        enabled = enabled
+    )
 
     Button(
         modifier = modifier,

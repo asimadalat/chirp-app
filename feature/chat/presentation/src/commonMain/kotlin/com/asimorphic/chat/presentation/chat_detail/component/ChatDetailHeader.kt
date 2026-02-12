@@ -31,6 +31,7 @@ import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.chat.presentation.component.ChatHeader
 import com.asimorphic.chat.presentation.component.ChatItemHeaderRow
 import com.asimorphic.chat.presentation.model.ChatUi
+import com.asimorphic.core.designsystem.component.button.ChirpButtonType
 import com.asimorphic.core.designsystem.component.button.ChirpIconButton
 import com.asimorphic.core.designsystem.component.dropdown.ChirpDropdownMenu
 import com.asimorphic.core.designsystem.component.dropdown.DropdownItem
@@ -64,7 +65,8 @@ fun ChatDetailHeader(
     ) {
         if (!isChatListPresent) {
             ChirpIconButton(
-                onClick = onBackClick
+                onClick = onBackClick,
+                type = ChirpButtonType.SECONDARY
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
@@ -95,7 +97,8 @@ fun ChatDetailHeader(
 
         Box {
             ChirpIconButton(
-                onClick = onChatOptionsClick
+                onClick = onChatOptionsClick,
+                type = ChirpButtonType.SECONDARY
             ) {
                 Icon(
                     imageVector = Icons.Rounded.ArrowDropDown,

@@ -80,7 +80,10 @@ fun ChatListItemUi(
                     color = MaterialTheme.colorScheme.extended.textSecondary,
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(
+                        horizontal = 5.dp
+                    )
                 )
             }
         }

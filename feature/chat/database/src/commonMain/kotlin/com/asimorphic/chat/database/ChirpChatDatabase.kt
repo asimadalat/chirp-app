@@ -1,5 +1,6 @@
 package com.asimorphic.chat.database
 
+import androidx.room.ConstructedBy
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.asimorphic.chat.database.dao.ChatDao
@@ -23,6 +24,9 @@ import com.asimorphic.chat.database.view.LastMessageView
         LastMessageView::class
     ],
     version = 1
+)
+@ConstructedBy(
+    value = ChirpChatDatabaseConstructor::class
 )
 abstract class ChirpChatDatabase: RoomDatabase() {
     abstract val chatDao: ChatDao

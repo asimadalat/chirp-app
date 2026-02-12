@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 
@@ -19,15 +20,16 @@ fun AdaptiveRoundedCornerColumn(
 ) {
     Column(
         modifier = modifier.shadow(
-            elevation = if (isCornersRounded) 4.dp else 0.dp,
+            elevation = if (isCornersRounded) 8.dp else 0.dp,
+            spotColor = Color.Black.copy(alpha = 0.2f),
             shape = if (isCornersRounded)
-                        RoundedCornerShape(size = 16.dp)
+                        RoundedCornerShape(size = 24.dp)
                     else
                         RectangleShape
         ).background(
             color = MaterialTheme.colorScheme.surface,
             shape = if (isCornersRounded)
-                        RoundedCornerShape(size = 16.dp)
+                        RoundedCornerShape(size = 24.dp)
                     else
                         RectangleShape
         )

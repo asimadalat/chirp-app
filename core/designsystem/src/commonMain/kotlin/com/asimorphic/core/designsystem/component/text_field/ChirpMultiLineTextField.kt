@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
+import com.asimorphic.core.designsystem.component.button.ChirpButtonType
 import com.asimorphic.core.designsystem.component.button.ChirpIconButton
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
@@ -112,7 +113,8 @@ fun ChirpMultiLineTextFieldPreview() {
         ) {
             Spacer(modifier = Modifier.weight(weight = 1f))
             ChirpIconButton(
-                onClick = {}
+                onClick = {},
+                type = ChirpButtonType.PRIMARY
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.Send,

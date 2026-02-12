@@ -158,15 +158,23 @@ fun ChatDetailScreen(
                     AnimatedVisibility(
                         visible = !screenSizeType.isWideView && state.chatUi != null
                     ) {
-                        MessageEntryBox(
-                            messageTextFieldState = state.messageTextFieldState,
-                            connectionState = state.connectionState,
-                            isTextInputEnabled = state.canSendMessage,
-                            onSendClick = {
-                                onAction(ChatDetailAction.OnSendMessageClick)
-                            },
-                            modifier = Modifier.fillMaxWidth()
-                        )
+                        AdaptiveRoundedCornerColumn(
+                            isCornersRounded = screenSizeType.isWideView
+                        ) {
+                            MessageEntryBox(
+                                messageTextFieldState = state.messageTextFieldState,
+                                connectionState = state.connectionState,
+                                isTextInputEnabled = state.canSendMessage,
+                                onSendClick = {
+                                    onAction(ChatDetailAction.OnSendMessageClick)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(
+                                        vertical = 8.dp,
+                                        horizontal = 10.dp
+                                    )
+                            )
+                        }
                     }
                 }
 

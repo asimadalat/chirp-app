@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
@@ -27,6 +26,7 @@ import chirp.feature.chat.presentation.generated.resources.send
 import chirp.feature.chat.presentation.generated.resources.send_a_message
 import com.asimorphic.chat.domain.model.ConnectionState
 import com.asimorphic.chat.presentation.mapper.toUiText
+import com.asimorphic.core.designsystem.component.button.ChirpButtonType
 import com.asimorphic.core.designsystem.component.button.ChirpIconButton
 import com.asimorphic.core.designsystem.component.text_field.ChirpMultiLineTextField
 import com.asimorphic.core.designsystem.theme.ChirpTheme
@@ -47,7 +47,7 @@ fun MessageEntryBox(
 
     ChirpMultiLineTextField(
         state = messageTextFieldState,
-        modifier = modifier.padding(all = 4.dp),
+        modifier = modifier,
         enabled = isTextInputEnabled,
         placeholder = stringResource(
             resource = Res.string.send_a_message
@@ -81,6 +81,7 @@ fun MessageEntryBox(
         }
         ChirpIconButton(
             onClick = {},
+            type = ChirpButtonType.PRIMARY,
             enabled = isConnected && isTextInputEnabled
         ) {
             Icon(

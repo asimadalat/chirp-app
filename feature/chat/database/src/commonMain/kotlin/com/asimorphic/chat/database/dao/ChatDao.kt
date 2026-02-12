@@ -34,7 +34,7 @@ interface ChatDao {
     fun getChatWithMetaById(chatId: String): Flow<ChatWithMetaRelation?>
 
     @Query(value = "SELECT chatId FROM chat_entity")
-    fun getAllChatIds(): List<String>
+    suspend fun getAllChatIds(): List<String>
 
     @Query(value = "SELECT * FROM chat_entity ORDER BY lastActivityAt DESC")
     @Transaction

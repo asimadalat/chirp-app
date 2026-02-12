@@ -23,7 +23,7 @@ fun ChatHeader(
             modifier = Modifier.fillMaxWidth()
                 .heightIn(max = 80.dp)
                 .padding(
-                    vertical = 20.dp,
+                    vertical = 14.dp,
                     horizontal = 16.dp
                 ),
             contentAlignment = Alignment.Center
