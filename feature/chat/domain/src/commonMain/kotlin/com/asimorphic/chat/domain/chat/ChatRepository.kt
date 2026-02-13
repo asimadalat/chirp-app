@@ -18,6 +18,10 @@ interface ChatRepository {
         chatId: String
     ): EmptyResult<DataError.Remote>
 
+    suspend fun leaveChat(
+        chatId: String
+    ): EmptyResult<DataError.Remote>
+
     fun getChats(): Flow<List<Chat>>
 
     fun getChatInfoById(

@@ -49,7 +49,7 @@ fun ChirpDropdownMenu(
                         )
                         Text(
                             text = item.label,
-                            color = MaterialTheme.colorScheme.extended.textSecondary,
+                            color = item.contentColor,
                             fontWeight = FontWeight.Medium
                         )
                     }
