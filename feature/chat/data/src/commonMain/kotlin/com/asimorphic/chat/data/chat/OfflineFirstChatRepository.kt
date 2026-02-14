@@ -11,6 +11,7 @@ import com.asimorphic.chat.domain.chat.ChatRepository
 import com.asimorphic.chat.domain.chat.ChatService
 import com.asimorphic.chat.domain.model.Chat
 import com.asimorphic.chat.domain.model.ChatInfo
+import com.asimorphic.chat.domain.model.ChatParticipant
 import com.asimorphic.core.domain.util.DataError
 import com.asimorphic.core.domain.util.EmptyResult
 import com.asimorphic.core.domain.util.Result
@@ -80,6 +81,33 @@ class OfflineFirstChatRepository(
                 )
             }
             .onEmpty()
+    }
+
+    override fun getActiveChatParticipantsByChatId(chatId: String): Flow<List<ChatParticipant>> {
+        return db.chatDao.getActiveParticipantsByChatId(
+            chatId = chatId
+        ).map { participants ->
+            participants.map {  it.toDomain() }
+        }
+    }
+
+    override suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>
+    ): Result<Chat, DataError.Remote> {
+        return chatService
+            .addParticipantsToChat(
+                chatId = chatId,
+                userIds = userIds
+            )
+            .onSuccess { chat ->
+                db.chatDao.upsertChatWithParticipantsAndCrossRefs(
+                    chat = chat.toEntity(),
+                    participants = chat.participants.map { it.toEntity() },
+                    participantDao = db.chatParticipantDao,
+                    crossRefDao = db.chatParticipantCrossRefDao
+                )
+            }
     }
 
     override suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {

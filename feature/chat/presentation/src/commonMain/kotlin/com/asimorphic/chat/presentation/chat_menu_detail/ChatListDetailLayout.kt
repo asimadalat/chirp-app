@@ -21,6 +21,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asimorphic.chat.presentation.chat_detail.ChatDetailRoot
 import com.asimorphic.chat.presentation.chat_menu.ChatListRoot
 import com.asimorphic.chat.presentation.create_chat.CreateChatRoot
+import com.asimorphic.chat.presentation.manage_chat.ManageChatRoot
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.util.DialogSheetScopedViewModel
 import kotlinx.coroutines.launch
@@ -98,6 +99,11 @@ fun ChatListDetailLayout(
                     chatId = sharedState.selectedChatId,
                     isChatListPresent = listPane == PaneAdaptedValue.Expanded
                             && detailPane == PaneAdaptedValue.Expanded,
+                    onPeopleClick = {
+                        chatListDetailViewModel.onAction(
+                            action = ChatListDetailAction.OnManageChatClick
+                        )
+                    },
                     onNavigateBack = {
                         scope.launch {
                             if (scaffoldNavigator.canNavigateBack())
@@ -128,6 +134,24 @@ fun ChatListDetailLayout(
                 scope.launch {
                     scaffoldNavigator.navigateTo(pane = ListDetailPaneScaffoldRole.Detail)
                 }
+            }
+        )
+    }
+
+    DialogSheetScopedViewModel(
+        isVisible = sharedState.dialogState is ChatMenuDetailDialogState.ManageChat
+    ) {
+        ManageChatRoot(
+            chatId = sharedState.selectedChatId,
+            onDismiss = {
+                chatListDetailViewModel.onAction(
+                    action = ChatListDetailAction.OnDismissCurrentDialog
+                )
+            },
+            onParticipantsAdded = {
+                chatListDetailViewModel.onAction(
+                    action = ChatListDetailAction.OnDismissCurrentDialog
+                )
             }
         )
     }

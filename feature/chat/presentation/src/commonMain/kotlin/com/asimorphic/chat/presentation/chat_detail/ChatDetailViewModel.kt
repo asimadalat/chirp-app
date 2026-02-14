@@ -83,17 +83,9 @@ class ChatDetailViewModel(
     fun onAction(action: ChatDetailAction) {
         when (action) {
             is ChatDetailAction.OnSelectChat -> switchChat(chatId = action.chatId)
-            ChatDetailAction.OnBackClick -> {}
             ChatDetailAction.OnChatOptionsClick -> onChatOptionsClick()
-            is ChatDetailAction.OnDeleteMessageClick -> {}
             ChatDetailAction.OnDismissChatOptions -> onDismissChatOptions()
-            ChatDetailAction.OnDismissMessageOptions -> {}
             ChatDetailAction.OnLeaveChatClick -> onLeaveChatClick()
-            is ChatDetailAction.OnMessageLongClick -> {}
-            ChatDetailAction.OnPeopleClick -> {}
-            is ChatDetailAction.OnRetryClick -> {}
-            ChatDetailAction.OnScrollToTop -> {}
-            ChatDetailAction.OnSendMessageClick -> {}
             else -> Unit
         }
     }

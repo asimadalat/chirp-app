@@ -10,12 +10,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 
 @Composable
 fun ColumnScope.ChatParticipantSelectionSection(
+    existingChatParticipants: List<ChatParticipantUi>,
     selectedParticipants: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
     searchResult: ChatParticipantUi? = null
@@ -39,6 +41,22 @@ fun ColumnScope.ChatParticipantSelectionSection(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
+            items(
+                items = existingChatParticipants,
+                key = { "existing_${it.id}" }
+            ) { existingChatParticipant ->
+                ChatParticipantListItem(
+                    participantUi = existingChatParticipant,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            if (existingChatParticipants.isNotEmpty()) {
+                item {
+                    ChirpHorizontalDivider()
+                }
+            }
+
             searchResult?.let {
                 item {
                     ChatParticipantListItem(

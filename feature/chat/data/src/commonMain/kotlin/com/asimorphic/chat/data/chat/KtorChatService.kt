@@ -1,6 +1,7 @@
 package com.asimorphic.chat.data.chat
 
 import com.asimorphic.chat.data.dto.ChatDto
+import com.asimorphic.chat.data.dto.request.AddParticipantsRequest
 import com.asimorphic.chat.data.dto.request.CreateChatRequest
 import com.asimorphic.chat.data.mapper.toDomain
 import com.asimorphic.chat.domain.chat.ChatService
@@ -49,6 +50,18 @@ class KtorChatService(
         ).map {
             it.toDomain()
         }
+    }
+
+    override suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>
+    ): Result<Chat, DataError.Remote> {
+        return httpClient.post<AddParticipantsRequest, ChatDto>(
+            route = "/chat/$chatId/add",
+            body = AddParticipantsRequest(
+                userIds = userIds
+            )
+        ).map { it.toDomain() }
     }
 
     override suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {

@@ -2,6 +2,7 @@ package com.asimorphic.chat.domain.chat
 
 import com.asimorphic.chat.domain.model.Chat
 import com.asimorphic.chat.domain.model.ChatInfo
+import com.asimorphic.chat.domain.model.ChatParticipant
 import com.asimorphic.core.domain.util.DataError
 import com.asimorphic.core.domain.util.EmptyResult
 import com.asimorphic.core.domain.util.Result
@@ -17,6 +18,15 @@ interface ChatRepository {
     suspend fun fetchChatById(
         chatId: String
     ): EmptyResult<DataError.Remote>
+
+    fun getActiveChatParticipantsByChatId(
+        chatId: String
+    ): Flow<List<ChatParticipant>>
+
+    suspend fun addParticipantsToChat(
+        chatId: String,
+        userIds: List<String>
+    ): Result<Chat, DataError.Remote>
 
     suspend fun leaveChat(
         chatId: String

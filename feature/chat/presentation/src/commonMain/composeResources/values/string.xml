@@ -27,6 +27,9 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="reconnecting">Reconnecting...</string>
+    <string name="save">Save</string>
+    <string name="empty_chat_detail_title">Start something</string>
+    <string name="empty_chat_detail_subtitle">Select a conversation or begin a new one to get the ideas flowing!</string>
     <string name="error_network">Network error</string>
     <string name="error_unknown">Unknown error</string>
 </resources>

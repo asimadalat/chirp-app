@@ -20,7 +20,7 @@ import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun EmptyListPlaceholder(
+fun EmptyContentPlaceholder(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier

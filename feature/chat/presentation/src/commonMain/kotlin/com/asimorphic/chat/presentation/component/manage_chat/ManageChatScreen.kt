@@ -1,4 +1,4 @@
-package com.asimorphic.chat.presentation.create_chat
+package com.asimorphic.chat.presentation.component.manage_chat
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -17,65 +17,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.cancel
 import chirp.feature.chat.presentation.generated.resources.create_chat
-import com.asimorphic.chat.domain.model.Chat
-import com.asimorphic.chat.presentation.component.manage_chat.ManageChatAction
-import com.asimorphic.chat.presentation.component.manage_chat.ManageChatState
 import com.asimorphic.chat.presentation.component.ChatParticipantSearchSection
 import com.asimorphic.chat.presentation.component.ChatParticipantSelectionSection
 import com.asimorphic.chat.presentation.component.ManageChatActionSection
 import com.asimorphic.chat.presentation.component.ManageChatHeaderRow
-import com.asimorphic.chat.presentation.component.manage_chat.ManageChatScreen
 import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.button.ChirpButton
 import com.asimorphic.core.designsystem.component.button.ChirpButtonType
-import com.asimorphic.core.designsystem.component.layout.ChirpDialogSheetLayout
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.presentation.util.DeviceScreenSizeType
-import com.asimorphic.core.presentation.util.ObserveAsEvents
 import com.asimorphic.core.presentation.util.clearFocusOnTap
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CreateChatRoot(
-    onDismiss: () -> Unit,
-    onChatCreated: (Chat) -> Unit,
-    viewModel: CreateChatViewModel = koinViewModel()
-) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    ObserveAsEvents(flow = viewModel.events) { event ->
-        when (event) {
-            is CreateChatEvent.OnChatCreated -> onChatCreated(event.chat)
-        }
-    }
-
-    ChirpDialogSheetLayout(
-        onDismiss = onDismiss
-    ) {
-        ManageChatScreen(
-            headerText = stringResource(resource = Res.string.create_chat),
-            primaryButtonText = stringResource(resource = Res.string.create_chat),
-            state = state,
-            onAction = { action ->
-                when (action) {
-                    ManageChatAction.OnDismissDialog -> onDismiss()
-                    else -> Unit
-                }
-                viewModel.onAction(action = action)
-            }
-        )
-    }
-}
-
-@Composable
-fun CreateChatScreen(
+fun ManageChatScreen(
+    headerText: String,
     primaryButtonText: String,
     state: ManageChatState,
     onAction: (ManageChatAction) -> Unit,
@@ -102,7 +63,7 @@ fun CreateChatScreen(
         ) {
             Column {
                 ManageChatHeaderRow(
-                    title = primaryButtonText,
+                    title = headerText,
                     onCloseClick = {
                         onAction(ManageChatAction.OnDismissDialog)
                     },
@@ -135,7 +96,7 @@ fun CreateChatScreen(
         ManageChatActionSection(
             primaryButton = {
                 ChirpButton(
-                    text = stringResource(resource = Res.string.create_chat),
+                    text = primaryButtonText,
                     onClick = {
                         onAction(ManageChatAction.OnPrimaryActionClick)
                     },
@@ -162,7 +123,8 @@ fun CreateChatScreen(
 @Composable
 private fun Preview() {
     ChirpTheme {
-        CreateChatScreen(
+        ManageChatScreen(
+            headerText = stringResource(resource = Res.string.create_chat),
             primaryButtonText = stringResource(resource = Res.string.create_chat),
             state = ManageChatState(),
             onAction = {}
