@@ -27,8 +27,9 @@ import kotlinx.coroutines.supervisorScope
 
 class OfflineFirstChatRepository(
     private val db: ChirpChatDatabase,
-    private val chatService: ChatService
+    private val chatService: ChatService,
 ): ChatRepository {
+
     override suspend fun createChat(otherUserIds: List<String>): Result<Chat, DataError.Remote> {
         return chatService
             .createChat(

@@ -28,6 +28,7 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(dependencyNotation = libs.koin.android)
+                implementation(dependencyNotation = libs.androidx.lifecycle.process)
             }
         }
 
