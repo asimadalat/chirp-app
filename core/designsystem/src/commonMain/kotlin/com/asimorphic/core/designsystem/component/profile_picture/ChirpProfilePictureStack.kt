@@ -15,7 +15,7 @@ fun ChirpProfilePictureStack(
     profilePictures: List<ChatParticipantUi>,
     size: ProfilePictureSize = ProfilePictureSize.SMALL,
     maxVisibleCount: Int = 2,
-    overlapPercentage: Float = 0.45f
+    overlapPercentage: Float = 0.55f
 ) {
     val overlapOffset = -(size.dp * overlapPercentage)
     val visibleProfilePictures = profilePictures

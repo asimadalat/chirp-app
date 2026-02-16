@@ -38,11 +38,11 @@ fun ChatItemHeaderRow(
         ) {
             Text(
                 text = if (!isGroupChat)
-                    chatUi.otherParticipants.first().username
-                else
-                    chatUi.otherParticipants.take(n = 3)
-                        .joinToString(separator = ", ")
-                        { it.username },
+                            chatUi.otherParticipants.first().username
+                       else
+                            chatUi.otherParticipants.take(n = 3)
+                                .joinToString(separator = ", ")
+                                { it.username },
                 color = MaterialTheme.colorScheme.extended.textPrimary,
                 style = MaterialTheme.typography.titleXSmall,
                 overflow = TextOverflow.Ellipsis,
