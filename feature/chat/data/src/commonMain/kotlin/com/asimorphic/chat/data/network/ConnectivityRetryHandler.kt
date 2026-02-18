@@ -26,7 +26,7 @@ class ConnectivityRetryHandler(
         }
     }
 
-    fun resetDelay(): Unit {
+    fun resetDelay() {
         shouldSkipBackoff = true
     }
 
