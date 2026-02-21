@@ -23,6 +23,9 @@ kotlin {
 
                 implementation(dependencyNotation = libs.datastore)
                 implementation(dependencyNotation = libs.datastore.preferences)
+
+                implementation(dependencyNotation = libs.androidx.room.runtime)
+                implementation(dependencyNotation = libs.sqlite.bundled)
             }
         }
 

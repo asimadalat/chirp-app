@@ -24,6 +24,13 @@ interface ChatMessageDao {
     """)
     fun getMessagesByChatId(chatId: String): Flow<List<ChatMessageEntity>>
 
+    @Query(value = """
+        UPDATE chat_message_entity
+        SET deliveryStatus = :status, receivedAt = :receivedAt 
+        WHERE messageId = :messageId
+    """)
+    suspend fun updateDeliveryStatus(messageId: String, status: String, receivedAt: Long)
+
     @Query(value = "DELETE FROM chat_message_entity WHERE messageId = :messageId")
     suspend fun deleteMessageById(messageId: String)
 

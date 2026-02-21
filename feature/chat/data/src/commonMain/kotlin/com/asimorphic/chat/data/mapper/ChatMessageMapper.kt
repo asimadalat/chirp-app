@@ -1,6 +1,8 @@
 package com.asimorphic.chat.data.mapper
 
 import com.asimorphic.chat.data.dto.ChatMessageDto
+import com.asimorphic.chat.data.dto.websocket.IncomingWebSocketMessageDto
+import com.asimorphic.chat.data.dto.websocket.OutgoingWebSocketMessageDto
 import com.asimorphic.chat.database.entity.ChatMessageEntity
 import com.asimorphic.chat.database.view.LastMessageView
 import com.asimorphic.chat.domain.model.ChatMessage
@@ -62,5 +64,24 @@ fun ChatMessage.toEntity(): ChatMessageEntity {
         content = content,
         sentAt = createdAt.toEpochMilliseconds(),
         deliveryStatus = deliveryStatus.name,
+    )
+}
+
+fun ChatMessage.toOutgoingNewMessageDto(): OutgoingWebSocketMessageDto.NewMessage {
+    return OutgoingWebSocketMessageDto.NewMessage(
+        messageId = id,
+        chatId = chatId,
+        content = content
+    )
+}
+
+fun IncomingWebSocketMessageDto.NewMessageDto.toEntity(): ChatMessageEntity {
+    return ChatMessageEntity(
+        messageId = id,
+        chatId = chatId,
+        senderId = senderId,
+        content = content,
+        sentAt = Instant.parse(input = createdAt).toEpochMilliseconds(),
+        deliveryStatus = ChatMessageDeliveryStatus.SENT.name,
     )
 }
