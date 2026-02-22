@@ -1,14 +1,37 @@
 package com.asimorphic.chat.presentation.chat_menu_detail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.asimorphic.chat.domain.chat.ChatConnectionService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 
-class ChatListDetailViewModel: ViewModel() {
+class ChatListDetailViewModel(
+    private val chatConnectionService: ChatConnectionService
+): ViewModel() {
 
-    private val _state = MutableStateFlow(value = ChatMenuDetailState())
-    val state = _state.asStateFlow()
+    private var hasLoadedInitialData = false
+
+    private val _state = MutableStateFlow(value = ChatListDetailState())
+    val state = _state
+        .onStart {
+            if (!hasLoadedInitialData) {
+                chatConnectionService.chatMessages.launchIn(
+                    scope = viewModelScope
+                )
+
+                hasLoadedInitialData = true
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = ChatListDetailState()
+        )
 
     fun onAction(action: ChatListDetailAction) {
         when (action) {

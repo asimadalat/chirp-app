@@ -1,6 +1,6 @@
 package com.asimorphic.chat.presentation.chat_menu_detail
 
-data class ChatMenuDetailState(
+data class ChatListDetailState(
     val selectedChatId: String? = null,
     val dialogState: ChatMenuDetailDialogState =
         ChatMenuDetailDialogState.Hidden

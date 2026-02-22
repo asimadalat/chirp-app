@@ -7,6 +7,8 @@ import com.asimorphic.chat.database.entity.ChatMessageEntity
 import com.asimorphic.chat.database.view.LastMessageView
 import com.asimorphic.chat.domain.model.ChatMessage
 import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
+import com.asimorphic.chat.domain.model.OutgoingNewMessage
+import kotlin.time.Clock
 import kotlin.time.Instant
 
 fun ChatMessageDto.toDomain(): ChatMessage {
@@ -83,5 +85,27 @@ fun IncomingWebSocketMessageDto.NewMessageDto.toEntity(): ChatMessageEntity {
         content = content,
         sentAt = Instant.parse(input = createdAt).toEpochMilliseconds(),
         deliveryStatus = ChatMessageDeliveryStatus.SENT.name,
+    )
+}
+
+fun OutgoingNewMessage.toWebSocketDto(): OutgoingWebSocketMessageDto.NewMessage {
+    return OutgoingWebSocketMessageDto.NewMessage(
+        chatId = chatId,
+        messageId = messageId,
+        content = content
+    )
+}
+
+fun OutgoingWebSocketMessageDto.NewMessage.toEntity(
+    senderId: String,
+    deliveryStatus: ChatMessageDeliveryStatus
+): ChatMessageEntity {
+    return ChatMessageEntity(
+        messageId = messageId,
+        chatId = chatId,
+        senderId = senderId,
+        content = content,
+        sentAt = Clock.System.now().toEpochMilliseconds(),
+        deliveryStatus = deliveryStatus.name,
     )
 }

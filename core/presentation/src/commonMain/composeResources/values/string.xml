@@ -14,4 +14,5 @@
     <string name="error_serialisation">A serialisation error occurred.</string>
     <string name="error_service_unavailable">Service unavailable. Please try again later.</string>
     <string name="error_unknown">An unknown error occurred.</string>
+    <string name="error_could_not_send_message">An error occurred while sending.</string>
 </resources>

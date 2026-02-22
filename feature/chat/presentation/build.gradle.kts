@@ -18,6 +18,7 @@ kotlin {
                 implementation(projects.core.domain)
                 implementation(projects.core.designsystem)
 
+                implementation(dependencyNotation = libs.kotlinx.datetime)
                 implementation(dependencyNotation = libs.material3.adaptive)
                 implementation(dependencyNotation = libs.material3.adaptive.layout)
                 implementation(dependencyNotation = libs.material3.adaptive.navigation)

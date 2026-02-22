@@ -1,11 +1,16 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
+@file:OptIn(ExperimentalCoroutinesApi::class, ExperimentalUuidApi::class)
 
 package com.asimorphic.chat.presentation.chat_detail
 
 import androidx.compose.foundation.text.input.clearText
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asimorphic.chat.domain.chat.ChatConnectionService
 import com.asimorphic.chat.domain.chat.ChatRepository
+import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
+import com.asimorphic.chat.domain.model.ConnectionState
+import com.asimorphic.chat.domain.model.OutgoingNewMessage
 import com.asimorphic.chat.presentation.mapper.toUi
 import com.asimorphic.core.domain.auth.SessionService
 import com.asimorphic.core.domain.util.onFailure
@@ -16,16 +21,25 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.collections.map
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class ChatDetailViewModel(
     private val chatRepository: ChatRepository,
+    private val chatMessageRepository: ChatMessageRepository,
+    private val chatConnectionService: ChatConnectionService,
     private val sessionService: SessionService
 ) : ViewModel() {
 
@@ -45,6 +59,14 @@ class ChatDetailViewModel(
         }
 
     private val _state = MutableStateFlow(ChatDetailState())
+
+    private val canSendMessage = snapshotFlow {
+        _state.value.messageTextFieldState.text.toString()
+    }.map {
+        it.isBlank()
+    }.combine(flow = chatConnectionService.connectionState) { isMessageBlank, connectionState ->
+        !isMessageBlank && connectionState == ConnectionState.CONNECTED
+    }
 
     private val stateWithMessages = combine(
         flow = _state,
@@ -70,7 +92,10 @@ class ChatDetailViewModel(
         }
         .onStart {
             if (!hasLoadedInitialData) {
-                /** Load initial data here **/
+                observeConnectionState()
+                observeChatMessages()
+                observeCanSendMessage()
+
                 hasLoadedInitialData = true
             }
         }
@@ -86,8 +111,122 @@ class ChatDetailViewModel(
             ChatDetailAction.OnChatOptionsClick -> onChatOptionsClick()
             ChatDetailAction.OnDismissChatOptions -> onDismissChatOptions()
             ChatDetailAction.OnLeaveChatClick -> onLeaveChatClick()
+            ChatDetailAction.OnSendMessageClick -> sendMessage()
             else -> Unit
         }
+    }
+
+    private fun sendMessage() {
+        val chatId = _chatId.value
+        val content = state.value.messageTextFieldState.text.toString().trim()
+        if (chatId == null || content.isBlank())
+            return
+
+        viewModelScope.launch {
+            val message = OutgoingNewMessage(
+                chatId = chatId,
+                messageId = Uuid.random().toString(),
+                content = content
+            )
+
+            chatMessageRepository
+                .sendMessage(
+                    message = message
+                )
+                .onSuccess {
+                    state.value.messageTextFieldState.clearText()
+                }
+                .onFailure { exception ->
+                    eventChannel.send(
+                        element = ChatDetailEvent.OnError(
+                            error = exception.toUiText()
+                        )
+                    )
+                }
+        }
+    }
+
+    private fun observeConnectionState() {
+        chatConnectionService
+            .connectionState
+            .onEach { connectionState ->
+                when (connectionState) {
+                    ConnectionState.CONNECTED -> {
+                        _chatId.value?.let {
+                            chatMessageRepository.fetchMessages(
+                                chatId = it,
+                                before = null
+                            )
+                        }
+                    }
+                    else -> Unit
+                }
+
+                _state.update { it.copy(
+                    connectionState = connectionState
+                ) }
+            }
+            .launchIn(
+                scope = viewModelScope
+            )
+    }
+
+    private fun observeChatMessages() {
+        val existingMessages = state
+            .map {
+                it.messages
+            }
+            .distinctUntilChanged()
+
+        val newMessages = _chatId
+            .flatMapLatest { chatId ->
+                if (chatId != null)
+                    chatMessageRepository.getMessagesForChat(chatId = chatId)
+                else
+                    emptyFlow()
+            }
+            .combine(sessionService.observeAuthCredential()) { messages,  authCredential ->
+                if (authCredential == null)
+                    return@combine messages
+
+                _state.update { it.copy(
+                    messages = messages.map { it.toUi(selfUserId = authCredential.user.id) }
+                ) }
+
+                messages
+            }
+
+        val isNearBottom = state
+            .map {
+                it.isNearBottom
+            }
+            .distinctUntilChanged()
+
+        combine(
+            flow = existingMessages,
+            flow2 = newMessages,
+            flow3 = isNearBottom
+        ) { existingMessages, newMessages, isNearBottom ->
+            val lastExistingMessageId = existingMessages.lastOrNull()?.id
+            val lastNewMessageId = newMessages.lastOrNull()?.message?.id
+
+            if (lastExistingMessageId != lastNewMessageId && isNearBottom)
+                eventChannel.send(element = ChatDetailEvent.OnNewMessage)
+        }.launchIn(
+            scope = viewModelScope
+        )
+    }
+
+    private fun observeCanSendMessage() {
+        canSendMessage
+            .onEach { canSendMessage ->
+                _state.update { it.copy(
+                    canSendMessage = canSendMessage
+                ) }
+            }
+            .launchIn(
+                scope = viewModelScope
+            )
     }
 
     private fun onLeaveChatClick() {

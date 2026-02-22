@@ -69,6 +69,7 @@ fun ChatDetailRoot(
     ObserveAsEvents(flow = viewModel.events) { event ->
         when (event) {
             ChatDetailEvent.OnChatLeft -> onNavigateBack()
+            ChatDetailEvent.OnNewMessage -> {}
             is ChatDetailEvent.OnError -> {
                 snackbarHostState.showSnackbar(
                     message = event.error.asStringAsync()
@@ -204,7 +205,7 @@ fun ChatDetailScreen(
                                 MessageEntryBox(
                                     messageTextFieldState = state.messageTextFieldState,
                                     connectionState = state.connectionState,
-                                    isTextInputEnabled = state.canSendMessage,
+                                    isSendButtonEnabled = state.canSendMessage,
                                     onSendClick = {
                                         onAction(ChatDetailAction.OnSendMessageClick)
                                     },
@@ -229,7 +230,7 @@ fun ChatDetailScreen(
                     MessageEntryBox(
                         messageTextFieldState = state.messageTextFieldState,
                         connectionState = state.connectionState,
-                        isTextInputEnabled = state.canSendMessage,
+                        isSendButtonEnabled = state.canSendMessage,
                         onSendClick = {
                             onAction(ChatDetailAction.OnSendMessageClick)
                         },

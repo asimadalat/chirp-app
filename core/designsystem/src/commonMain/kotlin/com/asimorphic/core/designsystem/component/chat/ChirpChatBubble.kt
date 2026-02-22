@@ -38,7 +38,7 @@ fun ChirpChatBubble(
     triangleSize: Dp = 12.dp,
     onLongClick: (() -> Unit)? = null
 ) {
-    val padding  = 14.dp
+    val padding  = 12.dp
     Column(
         modifier = modifier
             .then(
@@ -69,7 +69,7 @@ fun ChirpChatBubble(
                 top = padding,
                 bottom = padding
             ),
-        verticalArrangement = Arrangement.spacedBy(space = 10.dp)
+        verticalArrangement = Arrangement.spacedBy(space = 4.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -105,7 +105,7 @@ fun ChirpChatBubbleLeftPreview() {
         ChirpChatBubble(
             from = "Asim",
             messageBody = "This is a very crazy really incredibly long sentence to test the Chirp chat bubble user experience, also how has your day been? Weather's nice today.",
-            formattedTimestamp = "Saturday 6:34pm",
+            formattedTimestamp = "6:34 pm",
             triangleAlign = TriangleAlign.LEFT,
             modifier = Modifier.widthIn(max = 250.dp),
             color = MaterialTheme.colorScheme.extended.accentGreen
@@ -120,7 +120,7 @@ fun ChirpChatBubbleRightPreview() {
         ChirpChatBubble(
             from = "Asim",
             messageBody = "Hello world!",
-            formattedTimestamp = "Saturday 6:34pm",
+            formattedTimestamp = "6:34 pm",
             triangleAlign = TriangleAlign.RIGHT,
             modifier = Modifier.widthIn(max = 250.dp)
         )

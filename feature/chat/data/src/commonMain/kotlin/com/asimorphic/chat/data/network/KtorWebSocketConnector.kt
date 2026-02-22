@@ -4,11 +4,11 @@ package com.asimorphic.chat.data.network
 
 import com.asimorphic.chat.data.dto.websocket.WebSocketMessageDto
 import com.asimorphic.chat.data.lifecycle.AppLifecycleObserver
-import com.asimorphic.chat.domain.exception.ConnectionError
 import com.asimorphic.chat.domain.model.ConnectionState
 import com.asimorphic.core.data.network.UrlConstants
 import com.asimorphic.core.domain.auth.SessionService
 import com.asimorphic.core.domain.log.ChirpLogger
+import com.asimorphic.core.domain.util.DataError
 import com.asimorphic.core.domain.util.EmptyResult
 import com.asimorphic.core.domain.util.Result
 import com.asimorphic.feature.chat.data.BuildKonfig
@@ -190,7 +190,7 @@ class KtorWebSocketConnector(
                value = BuildKonfig.API_KEY
            )
            header(
-               key = "",
+               key = "Authorization",
                value = "Bearer $accessToken"
            )
         }
@@ -228,7 +228,7 @@ class KtorWebSocketConnector(
                         else -> Unit
                     }
                 }
-        } ?: throw Exception(message = "Failed to establish websocket connection")
+        } ?: throw Throwable(message = "Failed to establish websocket connection")
 
         awaitClose {
             launch(context = NonCancellable) {
@@ -242,11 +242,11 @@ class KtorWebSocketConnector(
         }
     }
 
-    suspend fun sendMessage(message: String): EmptyResult<ConnectionError> {
+    suspend fun sendMessage(message: String): EmptyResult<DataError.Connection> {
         val connectionState = connectionState.value
 
         if (currentSession == null || connectionState != ConnectionState.CONNECTED)
-            return Result.Failure(error = ConnectionError.NOT_CONNECTED)
+            return Result.Failure(error = DataError.Connection.NOT_CONNECTED)
 
         return try {
             currentSession?.send(content = message)
@@ -254,7 +254,7 @@ class KtorWebSocketConnector(
         } catch (exception: Exception) {
             currentCoroutineContext().ensureActive()
             logger.error(message = "Could not send websocket message", throwable = exception)
-            Result.Failure(error = ConnectionError.MESSAGE_SEND_FAILED)
+            Result.Failure(error = DataError.Connection.MESSAGE_SEND_FAILED)
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.asimorphic.chat.data.di
 
 import com.asimorphic.chat.data.lifecycle.AppLifecycleObserver
+import com.asimorphic.chat.data.network.ConnectivityErrorHandler
 import com.asimorphic.chat.data.network.ConnectivityObserver
 import com.asimorphic.chat.database.DatabaseFactory
 import org.koin.android.ext.koin.androidContext
@@ -13,4 +14,5 @@ actual val platformChatDataModule: Module = module {
 
     singleOf(constructor = ::AppLifecycleObserver)
     singleOf(constructor = ::ConnectivityObserver)
+    singleOf(constructor = ::ConnectivityErrorHandler)
 }

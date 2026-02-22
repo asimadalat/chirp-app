@@ -39,7 +39,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun MessageEntryBox(
     messageTextFieldState: TextFieldState,
     connectionState: ConnectionState,
-    isTextInputEnabled: Boolean,
+    isSendButtonEnabled: Boolean,
     onSendClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -48,7 +48,6 @@ fun MessageEntryBox(
     ChirpMultiLineTextField(
         state = messageTextFieldState,
         modifier = modifier,
-        enabled = isTextInputEnabled,
         placeholder = stringResource(
             resource = Res.string.send_a_message
         ),
@@ -80,9 +79,9 @@ fun MessageEntryBox(
             }
         }
         ChirpIconButton(
-            onClick = {},
+            onClick = onSendClick,
             type = ChirpButtonType.PRIMARY,
-            enabled = isConnected && isTextInputEnabled
+            enabled = isConnected && isSendButtonEnabled
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Send,
@@ -107,7 +106,7 @@ fun MessageEntryBoxPreview() {
             MessageEntryBox(
                 messageTextFieldState = rememberTextFieldState(),
                 connectionState = ConnectionState.CONNECTING,
-                isTextInputEnabled = true,
+                isSendButtonEnabled = true,
                 onSendClick = {},
                 modifier = Modifier.fillMaxWidth()
             )

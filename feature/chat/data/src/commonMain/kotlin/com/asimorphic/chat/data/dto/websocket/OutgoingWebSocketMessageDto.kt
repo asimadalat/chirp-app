@@ -7,15 +7,12 @@ enum class OutgoingWebSocketMessageType {
 }
 
 @Serializable
-sealed class OutgoingWebSocketMessageDto(
-    val type: OutgoingWebSocketMessageType
-) {
+sealed interface OutgoingWebSocketMessageDto {
     @Serializable
     data class NewMessage(
         val chatId: String,
         val messageId: String,
-        val content: String
-    ): OutgoingWebSocketMessageDto(
-        type = OutgoingWebSocketMessageType.NEW_MESSAGE
-    )
+        val content: String,
+        val type: OutgoingWebSocketMessageType = OutgoingWebSocketMessageType.NEW_MESSAGE
+    ): OutgoingWebSocketMessageDto
 }

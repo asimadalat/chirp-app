@@ -5,18 +5,12 @@ import com.asimorphic.chat.data.dto.websocket.IncomingWebSocketMessageType
 import com.asimorphic.chat.data.dto.websocket.WebSocketMessageDto
 import com.asimorphic.chat.data.mapper.toDomain
 import com.asimorphic.chat.data.mapper.toEntity
-import com.asimorphic.chat.data.mapper.toOutgoingNewMessageDto
 import com.asimorphic.chat.data.network.KtorWebSocketConnector
 import com.asimorphic.chat.database.ChirpChatDatabase
 import com.asimorphic.chat.domain.chat.ChatConnectionService
 import com.asimorphic.chat.domain.chat.ChatRepository
-import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
-import com.asimorphic.chat.domain.exception.ConnectionError
 import com.asimorphic.chat.domain.model.ChatMessage
-import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.core.domain.auth.SessionService
-import com.asimorphic.core.domain.util.EmptyResult
-import com.asimorphic.core.domain.util.onFailure
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,7 +28,6 @@ class ChatWebSocketConnectionService(
     private val sessionService: SessionService,
     private val applicationScope: CoroutineScope,
     private val json: Json,
-    private val chatMessageRepository: ChatMessageRepository
 ): ChatConnectionService {
     override val chatMessages: Flow<ChatMessage> = webSocketConnector
         .messages
@@ -52,27 +45,6 @@ class ChatWebSocketConnectionService(
         )
 
     override val connectionState = webSocketConnector.connectionState
-
-    override suspend fun sendChatMessage(message: ChatMessage): EmptyResult<ConnectionError> {
-        val outgoingNewMessage = message.toOutgoingNewMessageDto()
-        val webSocketMessage = WebSocketMessageDto(
-            type = outgoingNewMessage.type.name,
-            payload = json.encodeToString(value = outgoingNewMessage)
-        )
-
-        val rawSerializedMessage = json.encodeToString(value = webSocketMessage)
-
-        return webSocketConnector
-            .sendMessage(
-                message = rawSerializedMessage
-            )
-            .onFailure { exception ->
-                chatMessageRepository.updateMessageDeliveryStatus(
-                    messageId = message.id,
-                    status = ChatMessageDeliveryStatus.FAILED
-                )
-            }
-    }
 
     private fun parseIncomingMessage(message: WebSocketMessageDto): IncomingWebSocketMessageDto? {
         return when (message.type) {

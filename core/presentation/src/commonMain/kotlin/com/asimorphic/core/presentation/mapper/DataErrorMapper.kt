@@ -3,6 +3,7 @@ package com.asimorphic.core.presentation.mapper
 import chirp.core.presentation.generated.resources.Res
 import chirp.core.presentation.generated.resources.error_bad_request
 import chirp.core.presentation.generated.resources.error_conflict
+import chirp.core.presentation.generated.resources.error_could_not_send_message
 import chirp.core.presentation.generated.resources.error_disk_full
 import chirp.core.presentation.generated.resources.error_forbidden
 import chirp.core.presentation.generated.resources.error_internal_server
@@ -36,6 +37,8 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.SERVICE_UNAVAILABLE -> Res.string.error_service_unavailable
         DataError.Remote.SERIALIZATION -> Res.string.error_serialisation
         DataError.Remote.UNKNOWN -> Res.string.error_unknown
+        DataError.Connection.NOT_CONNECTED -> Res.string.error_no_internet
+        DataError.Connection.MESSAGE_SEND_FAILED -> Res.string.error_could_not_send_message
     }
 
     return UiText.Resource(id = resource)

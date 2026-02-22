@@ -2,9 +2,12 @@ package com.asimorphic.chat.database.dao
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Upsert
 import com.asimorphic.chat.database.entity.ChatMessageEntity
+import com.asimorphic.chat.database.relation.ChatMessageWithSenderRelation
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 @Dao
 interface ChatMessageDao {
@@ -14,6 +17,41 @@ interface ChatMessageDao {
     @Upsert
     suspend fun upsertMessages(messages: List<ChatMessageEntity>)
 
+    @Transaction
+    suspend fun upsertMessagesAndSyncIfApplicable(
+        chatId: String,
+        serverMessages: List<ChatMessageEntity>,
+        pageSize: Int,
+        shouldSync: Boolean = false
+    ) {
+        val localMessages = getMessagesByChatIdLimit(
+            chatId = chatId,
+            limit = pageSize
+        ).first()
+
+        upsertMessages(messages = serverMessages)
+        if (!shouldSync)
+            return
+
+        val serverChatMessageIds = serverMessages
+            .map {
+                it.messageId
+            }.toSet()
+
+        val messageIdsToDelete = localMessages
+            .filter { localMessage ->
+                val missingOnServer = localMessage.messageId !in serverChatMessageIds
+                val isSent = localMessage.deliveryStatus == "SENT"
+
+                missingOnServer && isSent
+            }
+            .map {
+                it.messageId
+            }
+
+        deleteMessagesByIds(messageIds = messageIdsToDelete)
+    }
+
     @Query("SELECT * FROM chat_message_entity WHERE messageId = :messageId")
     suspend fun getMessageById(messageId: String): ChatMessageEntity?
 
@@ -22,7 +60,15 @@ interface ChatMessageDao {
         WHERE chatId = :chatId 
         ORDER BY sentAt DESC
     """)
-    fun getMessagesByChatId(chatId: String): Flow<List<ChatMessageEntity>>
+    fun getMessagesByChatId(chatId: String): Flow<List<ChatMessageWithSenderRelation>>
+
+    @Query(value = """
+        SELECT * FROM chat_message_entity 
+        WHERE chatId = :chatId 
+        ORDER BY sentAt DESC
+        LIMIT :limit
+    """)
+    fun getMessagesByChatIdLimit(chatId: String, limit: Int): Flow<List<ChatMessageEntity>>
 
     @Query(value = """
         UPDATE chat_message_entity

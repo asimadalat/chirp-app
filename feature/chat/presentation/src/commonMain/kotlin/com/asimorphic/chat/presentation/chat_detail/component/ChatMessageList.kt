@@ -49,12 +49,11 @@ fun ChatMessageList(
             reverseLayout = true,
             verticalArrangement = Arrangement
                 .spacedBy(
-                    space = 18.dp
+                    space = 16.dp
                 ),
         ) {
             items(
                 items = messages,
-                key = { it.id }
             ) { message ->
               ChatDetailListItemUi(
                   messageUi = message,
@@ -63,7 +62,6 @@ fun ChatMessageList(
                   onDeleteClick = onDeleteMessageClick,
                   onRetryClick = onMessageRetryClick,
                   modifier = Modifier.fillMaxWidth()
-                      .animateItem()
               )
             }
         }
