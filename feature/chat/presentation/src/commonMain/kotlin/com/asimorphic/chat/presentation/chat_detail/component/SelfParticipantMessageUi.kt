@@ -44,11 +44,9 @@ fun SelfParticipantMessageUi(
             alignment = Alignment.End
         )
     ) {
-        Box(
-            modifier = Modifier.weight(weight = 1f)
-        ) {
+        Box {
             ChirpChatBubble(
-                from = "",
+                from = null,
                 messageBody = message.content,
                 formattedTimestamp = message.formattedSentTime.asString(),
                 triangleAlign = TriangleAlign.RIGHT,

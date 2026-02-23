@@ -5,6 +5,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,21 +25,22 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
+import com.asimorphic.core.designsystem.theme.labelXSmall
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ChirpChatBubble(
-    from: String,
     messageBody: String,
     formattedTimestamp: String,
     triangleAlign: TriangleAlign,
+    from: String? = null,
     modifier: Modifier = Modifier,
     color: Color = MaterialTheme.colorScheme.extended.surfaceHigher,
     messageStatus: @Composable (() -> Unit)? = null,
     triangleSize: Dp = 12.dp,
     onLongClick: (() -> Unit)? = null
 ) {
-    val padding  = 12.dp
+    val padding  = 10.dp
     Column(
         modifier = modifier
             .then(
@@ -68,25 +70,23 @@ fun ChirpChatBubble(
                 } else padding,
                 top = padding,
                 bottom = padding
+            ).width(
+                intrinsicSize = IntrinsicSize.Max
             ),
         verticalArrangement = Arrangement.spacedBy(space = 4.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = from,
-                color = MaterialTheme.colorScheme.extended.textSecondary,
-                style = MaterialTheme.typography.labelSmall,
-                modifier = Modifier.weight(weight = 1f)
-            )
-            Spacer(modifier = Modifier.width(width = 22.dp))
-            Text(
-                text = formattedTimestamp,
-                color = MaterialTheme.colorScheme.extended.textSecondary,
-                style = MaterialTheme.typography.labelSmall
-            )
+        from?.let {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = from,
+                    color = MaterialTheme.colorScheme.extended.textSecondary,
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier.weight(weight = 1f)
+                )
+            }
         }
         Text(
             text = messageBody,
@@ -94,7 +94,18 @@ fun ChirpChatBubble(
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth()
         )
-        messageStatus?.invoke()
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            messageStatus?.invoke()
+            Spacer(modifier = Modifier.weight(0.5f))
+            Text(
+                text = formattedTimestamp,
+                color = MaterialTheme.colorScheme.extended.textSecondary,
+                style = MaterialTheme.typography.labelXSmall
+            )
+        }
     }
 }
 

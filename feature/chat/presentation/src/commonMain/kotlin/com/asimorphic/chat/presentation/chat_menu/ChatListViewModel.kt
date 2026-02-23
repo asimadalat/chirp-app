@@ -52,7 +52,7 @@ class ChatListViewModel(
         when (action) {
             is ChatListAction.OnChatClick -> {
                 _state.update { it.copy(
-                    selectedChatId = action.chat.id
+                    selectedChatId = action.chatId
                 ) }
             }
             else -> Unit

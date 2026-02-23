@@ -42,6 +42,9 @@ fun ChatListDetailLayout(
     BackHandler(enabled = scaffoldNavigator.canNavigateBack()) {
         scope.launch {
             scaffoldNavigator.navigateBack()
+            chatListDetailViewModel.onAction(
+                action = ChatListDetailAction.OnChatClick(chatId = null)
+            )
         }
     }
 
@@ -67,9 +70,10 @@ fun ChatListDetailLayout(
         listPane = {
             AnimatedPane {
                 ChatListRoot(
+                    selectedChatId = sharedState.selectedChatId,
                     onChatClick = {
                         chatListDetailViewModel.onAction(
-                            action = ChatListDetailAction.OnChatClick(chatId = it.id)
+                            action = ChatListDetailAction.OnChatClick(chatId = it)
                         )
                         scope.launch {
                             scaffoldNavigator.navigateTo(
