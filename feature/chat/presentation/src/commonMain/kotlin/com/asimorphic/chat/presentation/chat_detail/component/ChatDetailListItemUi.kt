@@ -21,6 +21,7 @@ fun ChatDetailListItemUi(
     onDismissMessageMenu: () -> Unit,
     onDeleteClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onRetryClick: (MessageUi.SelfParticipantMessage) -> Unit,
+    messageWithOptionsOpen: MessageUi.SelfParticipantMessage?,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -53,7 +54,8 @@ fun ChatDetailListItemUi(
                     },
                     onRetryClick = {
                         onRetryClick(messageUi)
-                    }
+                    },
+                    messageWithOptionsOpen = messageWithOptionsOpen
                 )
             }
         }
@@ -70,12 +72,12 @@ fun ChatDetailListItemSelfMessageSentUiPreview() {
                 content = "The quick brown fox jumped over the lazy dog.",
                 formattedSentTime = UiText.DynamicString(value="Tuesday 7:43pm"),
                 deliveryStatus = ChatMessageDeliveryStatus.SENT,
-                isMenuOpen = true
             ),
             onMessageLongClick = {},
             onDismissMessageMenu = {},
             onDeleteClick = {},
             onRetryClick = {},
+            messageWithOptionsOpen = null,
             modifier = Modifier.fillMaxWidth()
                 .height(height = 200.dp)
         )
@@ -92,12 +94,12 @@ fun ChatDetailListItemSelfMessageFailedUiPreview() {
                 content = "The quick brown fox jumped over the lazy dog.",
                 formattedSentTime = UiText.DynamicString(value="Tuesday 7:43pm"),
                 deliveryStatus = ChatMessageDeliveryStatus.FAILED,
-                isMenuOpen = true
             ),
             onMessageLongClick = {},
             onDismissMessageMenu = {},
             onDeleteClick = {},
             onRetryClick = {},
+            messageWithOptionsOpen = null,
             modifier = Modifier.fillMaxWidth()
                 .height(height = 200.dp)
         )
@@ -123,6 +125,7 @@ fun ChatDetailListItemOtherMessageUiPreview() {
             onDismissMessageMenu = {},
             onDeleteClick = {},
             onRetryClick = {},
+            messageWithOptionsOpen = null,
             modifier = Modifier.fillMaxWidth()
                 .height(height = 200.dp)
         )

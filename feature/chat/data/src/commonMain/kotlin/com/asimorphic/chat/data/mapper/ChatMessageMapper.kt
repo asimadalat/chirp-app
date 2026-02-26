@@ -29,7 +29,7 @@ fun ChatMessageEntity.toDomain(): ChatMessage {
         content = content,
         createdAt = Instant.fromEpochMilliseconds(epochMilliseconds = sentAt),
         senderId = senderId,
-        deliveryStatus = ChatMessageDeliveryStatus.SENT
+        deliveryStatus = ChatMessageDeliveryStatus.valueOf(value = deliveryStatus)
     )
 }
 

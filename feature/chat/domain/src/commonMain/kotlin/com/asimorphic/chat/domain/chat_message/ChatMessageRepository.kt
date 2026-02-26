@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.Flow
 interface ChatMessageRepository {
     suspend fun sendMessage(message: OutgoingNewMessage): EmptyResult<DataError>
 
+    suspend fun retryMessage(messageId: String): EmptyResult<DataError>
+
     suspend fun getMessagesForChat(chatId: String): Flow<List<ChatMessageWithSender>>
 
     suspend fun fetchMessages(
@@ -23,4 +25,6 @@ interface ChatMessageRepository {
         messageId: String,
         status: ChatMessageDeliveryStatus
     ): EmptyResult<DataError.Local>
+
+    suspend fun deleteMessage(messageId: String): EmptyResult<DataError.Remote>
 }

@@ -13,7 +13,6 @@ fun ChatMessageWithSender.toUi(selfUserId: String): MessageUi {
                 instant = message.createdAt
             ),
             deliveryStatus = message.deliveryStatus,
-            isMenuOpen = false
         )
     } else {
         MessageUi.OtherParticipantMessage(

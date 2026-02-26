@@ -1,6 +1,7 @@
 package com.asimorphic.chat.data.chat_message
 
 import com.asimorphic.chat.data.dto.websocket.OutgoingWebSocketMessageDto
+import com.asimorphic.chat.data.dto.websocket.OutgoingWebSocketMessageType
 import com.asimorphic.chat.data.dto.websocket.WebSocketMessageDto
 import com.asimorphic.chat.data.mapper.toDomain
 import com.asimorphic.chat.data.mapper.toEntity
@@ -55,11 +56,50 @@ class OfflineFirstChatMessageRepository(
                 )
                 .onFailure { exception ->
                     applicationScope.launch {
-                        db.chatMessageDao.upsertMessage(
-                            message = dto.toEntity(
-                                senderId = selfUser.id,
-                                deliveryStatus = ChatMessageDeliveryStatus.FAILED
-                            )
+                        db.chatMessageDao.updateDeliveryStatus(
+                            messageId = message.messageId,
+                            status = ChatMessageDeliveryStatus.FAILED.name,
+                            sentAt = Clock.System.now().toEpochMilliseconds()
+                        )
+                    }.join()
+                }
+        }
+    }
+
+    override suspend fun retryMessage(messageId: String): EmptyResult<DataError> {
+        return executeDatabaseUpdate {
+            val message = db
+                .chatMessageDao
+                .getMessageById(
+                    messageId = messageId
+                )
+                ?: return Result.Failure(
+                    error = DataError.Local.NOT_FOUND
+                )
+
+            db.chatMessageDao.updateDeliveryStatus(
+                messageId = messageId,
+                status = ChatMessageDeliveryStatus.SENDING.name,
+                sentAt = Clock.System.now().toEpochMilliseconds()
+            )
+
+            val dto = OutgoingWebSocketMessageDto.NewMessage(
+                chatId = message.chatId,
+                messageId = messageId,
+                content = message.content,
+                type = OutgoingWebSocketMessageType.NEW_MESSAGE
+            )
+
+            return webSocketConnector
+                .sendMessage(
+                    message = dto.toJson()
+                )
+                .onFailure { exception ->
+                    applicationScope.launch {
+                        db.chatMessageDao.updateDeliveryStatus(
+                            messageId = messageId,
+                            status = ChatMessageDeliveryStatus.FAILED.name,
+                            sentAt = Clock.System.now().toEpochMilliseconds()
                         )
                     }.join()
                 }
@@ -109,9 +149,23 @@ class OfflineFirstChatMessageRepository(
             db.chatMessageDao.updateDeliveryStatus(
                 messageId = messageId,
                 status = status.name,
-                receivedAt = Clock.System.now().toEpochMilliseconds()
+                sentAt = Clock.System.now().toEpochMilliseconds()
             )
         }
+    }
+
+    override suspend fun deleteMessage(messageId: String): EmptyResult<DataError.Remote> {
+        return chatMessageService
+            .deleteMessage(
+                messageId = messageId
+            )
+            .onSuccess {
+                applicationScope.launch {
+                    db.chatMessageDao.deleteMessageById(
+                        messageId = messageId
+                    )
+                }.join()
+            }
     }
 
     private fun OutgoingWebSocketMessageDto.NewMessage.toJson(): String {

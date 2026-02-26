@@ -199,6 +199,7 @@ fun ChatDetailScreen(
                             onDismissMessageMenu = {
                                 onAction(ChatDetailAction.OnDismissMessageOptions)
                             },
+                            messageWithOptionsOpen = state.messageWithOptionsOpen,
                             modifier = Modifier.fillMaxWidth()
                                 .weight(weight = 1f),
                         )
@@ -308,7 +309,6 @@ private fun ChatDetailMessagesPreview() {
                             id = Uuid.random().toString(),
                             content = "Hello world!",
                             deliveryStatus = ChatMessageDeliveryStatus.SENT,
-                            isMenuOpen = false,
                             formattedSentTime = UiText.DynamicString(value = "Tuesday, May 4")
                         )
                     } else {

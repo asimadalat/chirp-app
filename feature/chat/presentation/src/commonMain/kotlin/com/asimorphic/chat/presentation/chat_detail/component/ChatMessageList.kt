@@ -27,6 +27,7 @@ fun ChatMessageList(
     onMessageRetryClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onDeleteMessageClick: (MessageUi.SelfParticipantMessage) -> Unit,
     onDismissMessageMenu: () -> Unit,
+    messageWithOptionsOpen: MessageUi.SelfParticipantMessage?,
     modifier: Modifier = Modifier
 ) {
     if (messages.isEmpty()) {
@@ -54,6 +55,7 @@ fun ChatMessageList(
         ) {
             items(
                 items = messages,
+                key = { it.id }
             ) { message ->
               ChatDetailListItemUi(
                   messageUi = message,
@@ -61,7 +63,9 @@ fun ChatMessageList(
                   onDismissMessageMenu = onDismissMessageMenu,
                   onDeleteClick = onDeleteMessageClick,
                   onRetryClick = onMessageRetryClick,
+                  messageWithOptionsOpen = messageWithOptionsOpen,
                   modifier = Modifier.fillMaxWidth()
+                      .animateItem()
               )
             }
         }

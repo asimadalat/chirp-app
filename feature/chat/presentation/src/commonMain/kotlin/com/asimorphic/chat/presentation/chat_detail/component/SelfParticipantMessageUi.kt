@@ -34,6 +34,7 @@ fun SelfParticipantMessageUi(
     onDismissMessageMenu: () -> Unit,
     onDeleteClick: () -> Unit,
     onRetryClick: () -> Unit,
+    messageWithOptionsOpen: MessageUi.SelfParticipantMessage?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -59,7 +60,7 @@ fun SelfParticipantMessageUi(
             )
 
             ChirpDropdownMenu(
-                isOpen = message.isMenuOpen,
+                isOpen = messageWithOptionsOpen?.id == message.id,
                 onDismiss = onDismissMessageMenu,
                 items = listOf(
                     DropdownItem(

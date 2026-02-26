@@ -72,10 +72,10 @@ interface ChatMessageDao {
 
     @Query(value = """
         UPDATE chat_message_entity
-        SET deliveryStatus = :status, receivedAt = :receivedAt 
+        SET deliveryStatus = :status, sentAt = :sentAt 
         WHERE messageId = :messageId
     """)
-    suspend fun updateDeliveryStatus(messageId: String, status: String, receivedAt: Long)
+    suspend fun updateDeliveryStatus(messageId: String, status: String, sentAt: Long)
 
     @Query(value = "DELETE FROM chat_message_entity WHERE messageId = :messageId")
     suspend fun deleteMessageById(messageId: String)

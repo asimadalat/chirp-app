@@ -18,6 +18,7 @@ data class ChatDetailState(
     val messageTextFieldState: TextFieldState = TextFieldState(),
     val canSendMessage: Boolean = false,
     val isChatOptionsOpen: Boolean = false,
+    val messageWithOptionsOpen: MessageUi.SelfParticipantMessage? = null,
     val isNearBottom: Boolean = false,
     val connectionState: ConnectionState = ConnectionState.DISCONNECTED
 )

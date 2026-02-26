@@ -12,6 +12,7 @@ import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
 import com.asimorphic.chat.domain.model.ConnectionState
 import com.asimorphic.chat.domain.model.OutgoingNewMessage
 import com.asimorphic.chat.presentation.mapper.toUi
+import com.asimorphic.chat.presentation.model.MessageUi
 import com.asimorphic.core.domain.auth.SessionService
 import com.asimorphic.core.domain.util.onFailure
 import com.asimorphic.core.domain.util.onSuccess
@@ -79,7 +80,12 @@ class ChatDetailViewModel(
         currentState.copy(
             chatUi = chatInfo.chat.toUi(
                 selfParticipantId = authCredential.user.id
-            )
+            ),
+            messages = chatInfo.messages.map {
+                it.toUi(
+                    selfUserId = authCredential.user.id
+                )
+            }
         )
     }
 
@@ -112,7 +118,51 @@ class ChatDetailViewModel(
             ChatDetailAction.OnDismissChatOptions -> onDismissChatOptions()
             ChatDetailAction.OnLeaveChatClick -> onLeaveChatClick()
             ChatDetailAction.OnSendMessageClick -> sendMessage()
+            is ChatDetailAction.OnRetryClick -> retryMessage(messageUi = action.message)
+            is ChatDetailAction.OnDeleteMessageClick -> deleteMessage(messageUi = action.message)
+            ChatDetailAction.OnDismissMessageOptions -> onDismissMessageOptions()
+            is ChatDetailAction.OnMessageLongClick -> onMessageLongClick(messageUi = action.message)
             else -> Unit
+        }
+    }
+
+    private fun onMessageLongClick(messageUi: MessageUi.SelfParticipantMessage) {
+        _state.update { it.copy(
+            messageWithOptionsOpen = messageUi
+        ) }
+    }
+
+    private fun onDismissMessageOptions() {
+        _state.update { it.copy(
+            messageWithOptionsOpen = null
+        ) }
+    }
+
+    private fun deleteMessage(messageUi: MessageUi.SelfParticipantMessage) {
+        viewModelScope.launch {
+            chatMessageRepository
+                .deleteMessage(
+                    messageId = messageUi.id
+                )
+                .onFailure { exception ->
+                    eventChannel.send(
+                        element = ChatDetailEvent.OnError(error = exception.toUiText())
+                    )
+                }
+        }
+    }
+
+    private fun retryMessage(messageUi: MessageUi.SelfParticipantMessage) {
+        viewModelScope.launch {
+            chatMessageRepository
+                .retryMessage(
+                    messageId = messageUi.id
+                )
+                .onFailure { exception ->
+                    eventChannel.send(
+                        element = ChatDetailEvent.OnError(error = exception.toUiText())
+                    )
+                }
         }
     }
 
@@ -184,16 +234,6 @@ class ChatDetailViewModel(
                     chatMessageRepository.getMessagesForChat(chatId = chatId)
                 else
                     emptyFlow()
-            }
-            .combine(sessionService.observeAuthCredential()) { messages,  authCredential ->
-                if (authCredential == null)
-                    return@combine messages
-
-                _state.update { it.copy(
-                    messages = messages.map { it.toUi(selfUserId = authCredential.user.id) }
-                ) }
-
-                messages
             }
 
         val isNearBottom = state
