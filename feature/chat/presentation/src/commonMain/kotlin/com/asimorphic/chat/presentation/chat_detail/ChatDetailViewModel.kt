@@ -9,11 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.asimorphic.chat.domain.chat.ChatConnectionService
 import com.asimorphic.chat.domain.chat.ChatRepository
 import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
+import com.asimorphic.chat.domain.model.ChatMessage
 import com.asimorphic.chat.domain.model.ConnectionState
 import com.asimorphic.chat.domain.model.OutgoingNewMessage
 import com.asimorphic.chat.presentation.mapper.toUi
 import com.asimorphic.chat.presentation.model.MessageUi
 import com.asimorphic.core.domain.auth.SessionService
+import com.asimorphic.core.domain.util.DataErrorException
+import com.asimorphic.core.domain.util.Paginator
 import com.asimorphic.core.domain.util.onFailure
 import com.asimorphic.core.domain.util.onSuccess
 import com.asimorphic.core.presentation.mapper.toUiText
@@ -51,7 +54,15 @@ class ChatDetailViewModel(
 
     private var hasLoadedInitialData = false
 
+    private var currentPaginator: Paginator<String?, ChatMessage>? = null
+
     private val chatInfoFlow = _chatId
+        .onEach { chatId ->
+            if (chatId == null)
+                currentPaginator = null
+            else
+                configurePaginatorForChat(chatId = chatId)
+        }
         .flatMapLatest { chatId ->
             if (chatId != null)
                 chatRepository.getChatInfoById(chatId = chatId)
@@ -322,6 +333,49 @@ class ChatDetailViewModel(
                     chatId = chatId
                 )
             }
+        }
+    }
+
+    private fun configurePaginatorForChat(chatId: String) {
+        currentPaginator = Paginator(
+            initialKey = null,
+            onLoadUpdated = { isLoading ->
+                _state.update { it.copy(
+                    isPaginationLoading = isLoading
+                ) }
+            },
+            onRequest = { before ->
+                chatMessageRepository.fetchMessages(
+                    chatId = chatId,
+                    before = before
+                )
+            },
+            getNextKey = { messages ->
+                messages.minOfOrNull {
+                    it.createdAt
+                }.toString()
+            },
+            onSuccess = { messages, _ ->
+                _state.update { it.copy(
+                    paginationEndReached = messages.isEmpty()
+                ) }
+            },
+            onError = { exception ->
+                if (exception is DataErrorException) {
+                    eventChannel.send(
+                        element = ChatDetailEvent.OnError(error = exception.error.toUiText())
+                    )
+                }
+            }
+        )
+
+        _state.update { it.copy(
+            paginationEndReached = false,
+            isPaginationLoading = false
+        ) }
+
+        viewModelScope.launch {
+            currentPaginator?.loadNextItems()
         }
     }
 }
