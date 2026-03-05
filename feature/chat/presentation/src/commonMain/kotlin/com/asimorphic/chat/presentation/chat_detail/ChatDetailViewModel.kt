@@ -13,6 +13,7 @@ import com.asimorphic.chat.domain.model.ChatMessage
 import com.asimorphic.chat.domain.model.ConnectionState
 import com.asimorphic.chat.domain.model.OutgoingNewMessage
 import com.asimorphic.chat.presentation.mapper.toUi
+import com.asimorphic.chat.presentation.mapper.toUiList
 import com.asimorphic.chat.presentation.model.MessageUi
 import com.asimorphic.core.domain.auth.SessionService
 import com.asimorphic.core.domain.util.DataErrorException
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.collections.map
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -92,11 +92,9 @@ class ChatDetailViewModel(
             chatUi = chatInfo.chat.toUi(
                 selfParticipantId = authCredential.user.id
             ),
-            messages = chatInfo.messages.map {
-                it.toUi(
-                    selfUserId = authCredential.user.id
-                )
-            }
+            messages = chatInfo.messages.toUiList(
+                selfUserId = authCredential.user.id
+            )
         )
     }
 
@@ -133,9 +131,22 @@ class ChatDetailViewModel(
             is ChatDetailAction.OnDeleteMessageClick -> deleteMessage(messageUi = action.message)
             ChatDetailAction.OnDismissMessageOptions -> onDismissMessageOptions()
             is ChatDetailAction.OnMessageLongClick -> onMessageLongClick(messageUi = action.message)
-            else -> Unit
+            ChatDetailAction.OnBackClick -> {}
+            ChatDetailAction.OnPeopleClick -> {}
+            ChatDetailAction.OnScrollToTop -> onScrollToTop()
+            ChatDetailAction.OnPaginationRetryClick -> retryPagination()
         }
     }
+
+    private fun loadNextItems() {
+        viewModelScope.launch {
+            currentPaginator?.loadNextItems()
+        }
+    }
+
+    private fun retryPagination() = loadNextItems()
+
+    private fun onScrollToTop() = loadNextItems()
 
     private fun onMessageLongClick(messageUi: MessageUi.SelfParticipantMessage) {
         _state.update { it.copy(
@@ -213,12 +224,7 @@ class ChatDetailViewModel(
             .onEach { connectionState ->
                 when (connectionState) {
                     ConnectionState.CONNECTED -> {
-                        _chatId.value?.let {
-                            chatMessageRepository.fetchMessages(
-                                chatId = it,
-                                before = null
-                            )
-                        }
+                        currentPaginator?.loadNextItems()
                     }
                     else -> Unit
                 }
@@ -357,14 +363,15 @@ class ChatDetailViewModel(
             },
             onSuccess = { messages, _ ->
                 _state.update { it.copy(
-                    paginationEndReached = messages.isEmpty()
+                    paginationEndReached = messages.isEmpty(),
+                    paginationError = null
                 ) }
             },
             onError = { exception ->
                 if (exception is DataErrorException) {
-                    eventChannel.send(
-                        element = ChatDetailEvent.OnError(error = exception.error.toUiText())
-                    )
+                    _state.update { it.copy(
+                        paginationError = exception.error.toUiText()
+                    ) }
                 }
             }
         )
@@ -373,9 +380,5 @@ class ChatDetailViewModel(
             paginationEndReached = false,
             isPaginationLoading = false
         ) }
-
-        viewModelScope.launch {
-            currentPaginator?.loadNextItems()
-        }
     }
 }

@@ -23,13 +23,14 @@ class Paginator<Key, Item>(
             return
 
         isMakingRequest = true
-        lastRequestKey = currentKey
         onLoadUpdated(true)
 
         try {
             onRequest(currentKey).onSuccess { items ->
                 val newKey = getNextKey(items)
                 onSuccess(items, newKey)
+
+                lastRequestKey = currentKey
                 currentKey = newKey
             }.onFailure { exception ->
                 onError(DataErrorException(error = exception))

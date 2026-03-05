@@ -38,6 +38,7 @@ import com.asimorphic.chat.presentation.chat_detail.component.AdaptiveRoundedCor
 import com.asimorphic.chat.presentation.chat_detail.component.ChatDetailHeader
 import com.asimorphic.chat.presentation.chat_detail.component.ChatMessageList
 import com.asimorphic.chat.presentation.chat_detail.component.MessageEntryBox
+import com.asimorphic.chat.presentation.chat_detail.component.PaginationScrollListener
 import com.asimorphic.chat.presentation.component.ChatHeader
 import com.asimorphic.chat.presentation.component.EmptyContentPlaceholder
 import com.asimorphic.chat.presentation.model.ChatUi
@@ -119,6 +120,25 @@ fun ChatDetailScreen(
 ) {
     val screenSizeType = currentDeviceScreenSizeType()
     val chatMessageListState = rememberLazyListState()
+
+    val chatMessageListCount = remember(key1 = state.messages) {
+        state.messages
+            .filter {
+                it is MessageUi.SelfParticipantMessage ||
+                        it is MessageUi.OtherParticipantMessage
+            }
+            .size
+    }
+
+    PaginationScrollListener(
+        itemCount = chatMessageListCount,
+        lazyListState = chatMessageListState,
+        isEndReached = state.paginationEndReached,
+        onNearTop = {
+            onAction(ChatDetailAction.OnScrollToTop)
+        },
+        isPaginationLoading = state.isPaginationLoading
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -202,6 +222,11 @@ fun ChatDetailScreen(
                             messageWithOptionsOpen = state.messageWithOptionsOpen,
                             modifier = Modifier.fillMaxWidth()
                                 .weight(weight = 1f),
+                            onPaginationRetryClick = {
+                                onAction(ChatDetailAction.OnPaginationRetryClick)
+                            },
+                            paginationError = state.paginationError?.toString(),
+                            isPaginationLoading = state.isPaginationLoading,
                         )
 
                         AnimatedVisibility(

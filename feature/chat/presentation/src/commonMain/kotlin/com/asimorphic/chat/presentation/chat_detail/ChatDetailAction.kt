@@ -32,4 +32,6 @@ sealed interface ChatDetailAction {
     data object OnSendMessageClick: ChatDetailAction
 
     data object OnScrollToTop: ChatDetailAction
+
+    data object OnPaginationRetryClick: ChatDetailAction
 }

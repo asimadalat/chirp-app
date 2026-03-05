@@ -25,3 +25,13 @@ fun ChatMessageWithSender.toUi(selfUserId: String): MessageUi {
         )
     }
 }
+
+fun List<ChatMessageWithSender>.toUiList(selfUserId: String): List<MessageUi> {
+    return this
+        .sortedByDescending {
+            it.message.createdAt
+        }
+        .map {
+            it.toUi(selfUserId)
+        }
+}
