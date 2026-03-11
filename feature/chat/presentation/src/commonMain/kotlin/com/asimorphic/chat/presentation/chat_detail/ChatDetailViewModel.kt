@@ -6,6 +6,8 @@ import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import chirp.feature.chat.presentation.generated.resources.Res
+import chirp.feature.chat.presentation.generated.resources.today
 import com.asimorphic.chat.domain.chat.ChatConnectionService
 import com.asimorphic.chat.domain.chat.ChatRepository
 import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
@@ -21,6 +23,7 @@ import com.asimorphic.core.domain.util.Paginator
 import com.asimorphic.core.domain.util.onFailure
 import com.asimorphic.core.domain.util.onSuccess
 import com.asimorphic.core.presentation.mapper.toUiText
+import com.asimorphic.core.presentation.util.UiText
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -131,11 +134,41 @@ class ChatDetailViewModel(
             is ChatDetailAction.OnDeleteMessageClick -> deleteMessage(messageUi = action.message)
             ChatDetailAction.OnDismissMessageOptions -> onDismissMessageOptions()
             is ChatDetailAction.OnMessageLongClick -> onMessageLongClick(messageUi = action.message)
-            ChatDetailAction.OnBackClick -> {}
-            ChatDetailAction.OnPeopleClick -> {}
             ChatDetailAction.OnScrollToTop -> onScrollToTop()
             ChatDetailAction.OnPaginationRetryClick -> retryPagination()
+            ChatDetailAction.OnHideChip -> hideChip()
+            is ChatDetailAction.OnTopVisibleIndexChanged -> updateChip(action.topVisibleIndex)
+            is ChatDetailAction.OnFirstVisibleIndexChanged -> updateNearBottom(action.firstVisibleIndex)
+            else -> Unit
         }
+    }
+
+    private fun updateNearBottom(firstVisibleIndex: Int) {
+        _state.update { it.copy(
+            isNearBottom = firstVisibleIndex <= 3
+        ) }
+    }
+
+    private fun updateChip(topVisibleIndex: Int) {
+        val visibleDate = calculateChipDateFromIndex(
+            messages = state.value.messages,
+            index = topVisibleIndex
+        )
+
+        _state.update { it.copy(
+            chipState = ChipState(
+                formattedDate = visibleDate,
+                isVisible = visibleDate != null
+            )
+        ) }
+    }
+
+    private fun hideChip() {
+        _state.update { it.copy(
+            chipState = it.chipState.copy(
+                isVisible = false
+            )
+        ) }
     }
 
     private fun loadNextItems() {
@@ -380,5 +413,31 @@ class ChatDetailViewModel(
             paginationEndReached = false,
             isPaginationLoading = false
         ) }
+    }
+
+    private fun calculateChipDateFromIndex(
+        messages: List<MessageUi>,
+        index: Int
+    ): UiText? {
+        if (messages.isEmpty() || index < 0 || index >= messages.size)
+            return null
+
+        val nearestDateSeparator = (index until messages.size)
+            .asSequence()
+            .mapNotNull { indexKey ->
+                val item = messages.getOrNull(indexKey)
+                if (item is MessageUi.DateSeparator) item.date else null
+            }
+            .firstOrNull()
+
+        return when (nearestDateSeparator) {
+            is UiText.Resource -> {
+                if (nearestDateSeparator.id == Res.string.today)
+                    null
+                else
+                    nearestDateSeparator
+            }
+            else -> nearestDateSeparator
+        }
     }
 }

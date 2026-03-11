@@ -3,6 +3,8 @@
 package com.asimorphic.chat.presentation.chat_detail
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.MaterialTheme
@@ -21,12 +24,17 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.backhandler.BackHandler
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chirp.feature.chat.presentation.generated.resources.Res
@@ -37,6 +45,8 @@ import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.chat.presentation.chat_detail.component.AdaptiveRoundedCornerColumn
 import com.asimorphic.chat.presentation.chat_detail.component.ChatDetailHeader
 import com.asimorphic.chat.presentation.chat_detail.component.ChatMessageList
+import com.asimorphic.chat.presentation.chat_detail.component.DateChip
+import com.asimorphic.chat.presentation.chat_detail.component.MessageChipListener
 import com.asimorphic.chat.presentation.chat_detail.component.MessageEntryBox
 import com.asimorphic.chat.presentation.chat_detail.component.PaginationScrollListener
 import com.asimorphic.chat.presentation.component.ChatHeader
@@ -51,6 +61,7 @@ import com.asimorphic.core.presentation.util.UiText
 import com.asimorphic.core.presentation.util.clearFocusOnTap
 import com.asimorphic.core.presentation.util.currentDeviceScreenSizeType
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -69,11 +80,17 @@ fun ChatDetailRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val chatMessageListState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     ObserveAsEvents(flow = viewModel.events) { event ->
         when (event) {
             ChatDetailEvent.OnChatLeft -> onNavigateBack()
-            ChatDetailEvent.OnNewMessage -> {}
+            ChatDetailEvent.OnNewMessage -> {
+                scope.launch {
+                    chatMessageListState.animateScrollToItem(0)
+                }
+            }
             is ChatDetailEvent.OnError -> {
                 snackbarHostState.showSnackbar(
                     message = event.error.asStringAsync()
@@ -86,7 +103,6 @@ fun ChatDetailRoot(
         viewModel.onAction(action = ChatDetailAction.OnSelectChat(chatId = chatId))
     }
 
-    val scope = rememberCoroutineScope()
     BackHandler(
         enabled = !isChatListPresent
     ) {
@@ -102,11 +118,13 @@ fun ChatDetailRoot(
         isChatListPresent = isChatListPresent,
         onAction = { action ->
             when (action) {
+                is ChatDetailAction.OnBackClick -> onNavigateBack()
                 is ChatDetailAction.OnPeopleClick -> onPeopleClick()
                 else -> Unit
             }
             viewModel.onAction(action = action)
         },
+        chatMessageListState = chatMessageListState,
         snackbarHostState = snackbarHostState
     )
 }
@@ -115,11 +133,11 @@ fun ChatDetailRoot(
 fun ChatDetailScreen(
     state: ChatDetailState,
     isChatListPresent: Boolean,
+    chatMessageListState: LazyListState,
     snackbarHostState: SnackbarHostState,
     onAction: (ChatDetailAction) -> Unit,
 ) {
     val screenSizeType = currentDeviceScreenSizeType()
-    val chatMessageListState = rememberLazyListState()
 
     val chatMessageListCount = remember(key1 = state.messages) {
         state.messages
@@ -130,6 +148,28 @@ fun ChatDetailScreen(
             .size
     }
 
+    LaunchedEffect(chatMessageListState) {
+        snapshotFlow {
+            chatMessageListState.firstVisibleItemIndex to chatMessageListState.layoutInfo.totalItemsCount
+        }.filter { (firstVisibleIndex, totalItemsCount) ->
+            firstVisibleIndex >= 0 && totalItemsCount > 0
+        }.collect { (firstVisibleItemIndex, _) ->
+            onAction(ChatDetailAction.OnFirstVisibleIndexChanged(firstVisibleItemIndex))
+        }
+    }
+
+    MessageChipListener(
+        messages = state.messages,
+        lazyListState = chatMessageListState,
+        isChipVisible = state.chipState.isVisible,
+        onShowChip = { indexKey ->
+            onAction(ChatDetailAction.OnTopVisibleIndexChanged(indexKey))
+        },
+        onHide = {
+            onAction(ChatDetailAction.OnHideChip)
+        }
+    )
+
     PaginationScrollListener(
         itemCount = chatMessageListCount,
         lazyListState = chatMessageListState,
@@ -139,6 +179,11 @@ fun ChatDetailScreen(
         },
         isPaginationLoading = state.isPaginationLoading
     )
+
+    val density = LocalDensity.current
+    var headerHeight by remember {
+        mutableStateOf(0.dp)
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -180,7 +225,13 @@ fun ChatDetailScreen(
                             modifier = Modifier.fillMaxSize()
                         )
                     } else {
-                        ChatHeader {
+                        ChatHeader(
+                            modifier = Modifier.onSizeChanged {
+                                headerHeight = with(density) {
+                                    it.height.toDp()
+                                }
+                            }
+                        ) {
                             ChatDetailHeader(
                                 chatUi = state.chatUi,
                                 isChatListPresent = isChatListPresent,
@@ -271,6 +322,19 @@ fun ChatDetailScreen(
                     )
                 }
             }
+
+            AnimatedVisibility(
+                visible = state.chipState.isVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = headerHeight + 16.dp)
+            ) {
+                state.chipState.formattedDate?.let {
+                    DateChip(date = state.chipState.formattedDate.asString())
+                }
+            }
         }
     }
 }
@@ -282,6 +346,7 @@ private fun ChatDetailEmptyPreview() {
         ChatDetailScreen(
             state = ChatDetailState(),
             isChatListPresent  = false,
+            chatMessageListState = rememberLazyListState(),
             snackbarHostState = remember { SnackbarHostState() },
             onAction = {}
         )
@@ -351,6 +416,7 @@ private fun ChatDetailMessagesPreview() {
                 }
             ),
             isChatListPresent = true,
+            chatMessageListState = rememberLazyListState(),
             snackbarHostState = remember { SnackbarHostState() },
             onAction = {}
         )

@@ -34,4 +34,14 @@ sealed interface ChatDetailAction {
     data object OnScrollToTop: ChatDetailAction
 
     data object OnPaginationRetryClick: ChatDetailAction
+
+    data object OnHideChip: ChatDetailAction
+
+    data class OnTopVisibleIndexChanged(
+        val topVisibleIndex: Int
+    ): ChatDetailAction
+
+    data class OnFirstVisibleIndexChanged(
+        val firstVisibleIndex: Int
+    ): ChatDetailAction
 }
