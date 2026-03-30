@@ -2,7 +2,7 @@
 # Build tools
 agp = "8.12.3"
 composeBom = "2025.07.00"
-kotlin = "2.2.21"
+kotlin = "2.2.0"
 ksp = "2.2.0-2.0.2"
 google-services = "4.4.4"
 

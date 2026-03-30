@@ -55,6 +55,18 @@ class ChatListViewModel(
                     selectedChatId = action.chatId
                 ) }
             }
+            ChatListAction.OnUserProfilePictureClick -> {
+                _state.update { it.copy(
+                    isMenuOpen = true
+                ) }
+            }
+            ChatListAction.OnManageProfileClick,
+            ChatListAction.OnLogoutClick,
+            ChatListAction.OnDismissMenu -> {
+                _state.update { it.copy(
+                    isMenuOpen = false
+                ) }
+            }
             else -> Unit
         }
     }

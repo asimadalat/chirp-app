@@ -5,6 +5,7 @@ import com.asimorphic.chat.presentation.chat_menu.ChatListViewModel
 import com.asimorphic.chat.presentation.chat_menu_detail.ChatListDetailViewModel
 import com.asimorphic.chat.presentation.create_chat.CreateChatViewModel
 import com.asimorphic.chat.presentation.manage_chat.ManageChatViewModel
+import com.asimorphic.chat.presentation.profile.ProfileViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -14,4 +15,5 @@ val chatPresentationModule = module {
     viewModelOf(constructor = ::ChatListDetailViewModel)
     viewModelOf(constructor = ::CreateChatViewModel)
     viewModelOf(constructor = ::ManageChatViewModel)
+    viewModelOf(constructor = ::ProfileViewModel)
 }

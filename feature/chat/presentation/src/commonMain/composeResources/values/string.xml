@@ -34,4 +34,18 @@
     <string name="empty_chat_detail_subtitle">Select a conversation or begin a new one to get the ideas flowing!</string>
     <string name="error_network">Network error</string>
     <string name="error_unknown">Unknown error</string>
+
+    <string name="profile_settings">Profile settings</string>
+    <string name="profile_image">Profile image</string>
+    <string name="upload">Upload</string>
+    <string name="contact_support_change_email">Contact Chirp Support to change your email.</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="password_hint">Use 8+ characters, at least one number and one symbol</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="delete_profile_picture">Delete profile picture</string>
+    <string name="delete_profile_picture_desc">Are you sure you want to delete your profile picture? This action cannot be undone.</string>
 </resources>

@@ -22,6 +22,7 @@ import com.asimorphic.chat.presentation.chat_detail.ChatDetailRoot
 import com.asimorphic.chat.presentation.chat_menu.ChatListRoot
 import com.asimorphic.chat.presentation.create_chat.CreateChatRoot
 import com.asimorphic.chat.presentation.manage_chat.ManageChatRoot
+import com.asimorphic.chat.presentation.profile.ProfileRoot
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.util.DialogSheetScopedViewModel
 import kotlinx.coroutines.launch
@@ -156,6 +157,16 @@ fun ChatListDetailLayout(
                 chatListDetailViewModel.onAction(
                     action = ChatListDetailAction.OnDismissCurrentDialog
                 )
+            }
+        )
+    }
+
+    DialogSheetScopedViewModel(
+        isVisible = sharedState.dialogState is ChatMenuDetailDialogState.ProfileDialog
+    ) {
+        ProfileRoot(
+            onDismiss = {chatListDetailViewModel.onAction(
+                ChatListDetailAction.OnDismissCurrentDialog)
             }
         )
     }
