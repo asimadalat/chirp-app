@@ -44,6 +44,7 @@ import chirp.feature.chat.presentation.generated.resources.upload
 import chirp.feature.chat.presentation.generated.resources.upload_icon
 import com.asimorphic.chat.presentation.profile.components.ProfileHeaderSection
 import com.asimorphic.chat.presentation.profile.components.ProfileSectionLayout
+import com.asimorphic.chat.presentation.profile.media_picker.rememberImagePickerLauncher
 import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.button.ChirpButton
 import com.asimorphic.core.designsystem.component.button.ChirpButtonType
@@ -70,6 +71,13 @@ fun ProfileRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    val launcher = rememberImagePickerLauncher { pickedImageData ->
+        viewModel.onAction(action = ProfileAction.OnPictureSelected(
+            pickedImageData.bytes,
+            pickedImageData.mimeType
+        ))
+    }
+
     ChirpDialogSheetLayout(
         onDismiss = onDismiss
     ) {
@@ -78,6 +86,9 @@ fun ProfileRoot(
             onAction = { action ->
                 when (action) {
                     is ProfileAction.OnDismiss -> onDismiss()
+                    is ProfileAction.OnUploadPictureClick -> {
+                        launcher.launch()
+                    }
                     else -> viewModel.onAction(action)
                 }
             }
