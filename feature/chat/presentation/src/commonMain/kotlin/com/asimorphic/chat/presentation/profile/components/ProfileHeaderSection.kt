@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.cancel
-import chirp.feature.chat.presentation.generated.resources.profile_settings
+import chirp.feature.chat.presentation.generated.resources.manage_profile
 import com.asimorphic.core.designsystem.component.button.ChirpButtonType
 import com.asimorphic.core.designsystem.component.button.ChirpIconButton
 import com.asimorphic.core.designsystem.theme.extended
@@ -38,7 +38,7 @@ fun ProfileHeaderSection(
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = stringResource(Res.string.profile_settings),
+                text = stringResource(Res.string.manage_profile),
                 color = MaterialTheme.colorScheme.extended.textSecondary,
                 style = MaterialTheme.typography.bodySmall
             )

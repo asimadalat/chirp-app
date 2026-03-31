@@ -2,20 +2,22 @@ package com.asimorphic.chat.data.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import com.asimorphic.chat.data.chat.ChatWebSocketConnectionService
-import com.asimorphic.chat.data.chat.KtorChatParticipantService
+import com.asimorphic.chat.data.chat_participant.KtorChatParticipantService
 import com.asimorphic.chat.data.chat.KtorChatService
 import com.asimorphic.chat.data.chat.OfflineFirstChatRepository
 import com.asimorphic.chat.data.chat_message.KtorChatMessageService
 import com.asimorphic.chat.data.chat_message.OfflineFirstChatMessageRepository
+import com.asimorphic.chat.data.chat_participant.OfflineFirstChatParticipantRepository
 import com.asimorphic.chat.data.network.ConnectivityRetryHandler
 import com.asimorphic.chat.data.network.KtorWebSocketConnector
 import com.asimorphic.chat.database.DatabaseFactory
 import com.asimorphic.chat.domain.chat.ChatConnectionService
-import com.asimorphic.chat.domain.chat.ChatParticipantService
+import com.asimorphic.chat.domain.chat_participant.ChatParticipantService
 import com.asimorphic.chat.domain.chat.ChatRepository
 import com.asimorphic.chat.domain.chat.ChatService
 import com.asimorphic.chat.domain.chat_message.ChatMessageRepository
 import com.asimorphic.chat.domain.chat_message.ChatMessageService
+import com.asimorphic.chat.domain.chat_participant.ChatParticipantRepository
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -32,6 +34,7 @@ val chatDataModule = module {
     singleOf(constructor = ::OfflineFirstChatRepository) bind ChatRepository::class
     singleOf(constructor = ::KtorChatMessageService) bind ChatMessageService::class
     singleOf(constructor = ::OfflineFirstChatMessageRepository) bind ChatMessageRepository::class
+    singleOf(constructor = ::OfflineFirstChatParticipantRepository) bind ChatParticipantRepository::class
     singleOf(constructor = ::ChatWebSocketConnectionService) bind ChatConnectionService::class
     singleOf(constructor = ::KtorWebSocketConnector)
     singleOf(constructor = ::ConnectivityRetryHandler)

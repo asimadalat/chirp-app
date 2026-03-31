@@ -1,8 +1,8 @@
-package com.asimorphic.chat.data.chat
+package com.asimorphic.chat.data.chat_participant
 
 import com.asimorphic.chat.data.dto.ChatParticipantDto
 import com.asimorphic.chat.data.mapper.toDomain
-import com.asimorphic.chat.domain.chat.ChatParticipantService
+import com.asimorphic.chat.domain.chat_participant.ChatParticipantService
 import com.asimorphic.chat.domain.model.ChatParticipant
 import com.asimorphic.core.data.network.get
 import com.asimorphic.core.domain.util.DataError
@@ -19,6 +19,14 @@ class KtorChatParticipantService(
         return httpClient.get<ChatParticipantDto>(
             route = "/chat/participants",
             queryParams = mapOf("query" to query)
+        ).map {
+            it.toDomain()
+        }
+    }
+
+    override suspend fun getSelfParticipant(): Result<ChatParticipant, DataError.Remote> {
+        return httpClient.get<ChatParticipantDto>(
+            route = "/chat/participants",
         ).map {
             it.toDomain()
         }

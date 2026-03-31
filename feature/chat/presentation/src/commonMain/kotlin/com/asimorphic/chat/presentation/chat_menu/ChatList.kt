@@ -70,7 +70,7 @@ fun ChatListRoot(
                 ChatListAction.OnConfirmLogout -> onConfirmLogoutClick()
                 ChatListAction.OnCreateChat -> onCreateChatClick()
                 ChatListAction.OnManageProfileClick -> onManageProfileClick()
-                else -> Unit
+                else -> viewModel.onAction(action)
             }
         },
         snackbarHostState = snackbarHostState

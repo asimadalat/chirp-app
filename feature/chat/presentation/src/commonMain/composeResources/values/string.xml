@@ -35,7 +35,6 @@
     <string name="error_network">Network error</string>
     <string name="error_unknown">Unknown error</string>
 
-    <string name="profile_settings">Profile settings</string>
     <string name="profile_image">Profile image</string>
     <string name="upload">Upload</string>
     <string name="contact_support_change_email">Contact Chirp Support to change your email.</string>
@@ -48,4 +47,8 @@
     <string name="hide_password">Hide password</string>
     <string name="delete_profile_picture">Delete profile picture</string>
     <string name="delete_profile_picture_desc">Are you sure you want to delete your profile picture? This action cannot be undone.</string>
+    <string name="password_change_successful">Password successfully changed!</string>
+    <string name="error_incorrect_current_password">Incorrect password</string>
+    <string name="error_new_password_matches_current">Your new password cannot be equal to the old one</string>
+
 </resources>
