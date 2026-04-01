@@ -101,12 +101,13 @@ suspend inline fun <reified Request, reified Response: Any> HttpClient.put(
     route: String,
     queryParams: Map<String, Any> = mapOf(),
     body: Request,
+    useAbsoluteUrl: Boolean = false,
     crossinline builder: HttpRequestBuilder.() -> Unit = {}
 ): Result<Response, DataError.Remote> {
 
     return safeCall {
         put {
-            url(urlString = constructRoute(route))
+            url(urlString = if (useAbsoluteUrl) route else constructRoute(route))
             queryParams.forEach { (key, value) ->
                 parameter(key = key, value = value)
             }
