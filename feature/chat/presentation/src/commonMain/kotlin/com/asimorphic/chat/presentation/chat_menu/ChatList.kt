@@ -42,6 +42,8 @@ import com.asimorphic.core.designsystem.component.button.ChirpFloatingActionButt
 import com.asimorphic.core.designsystem.component.dialog.ChirpDestructiveConfirmationDialog
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
+import com.asimorphic.core.presentation.permission.Permission
+import com.asimorphic.core.presentation.permission.rememberPermissionController
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -83,6 +85,11 @@ fun ChatListScreen(
     onAction: (ChatListAction) -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
+    val permissionController = rememberPermissionController()
+    LaunchedEffect(true) {
+        permissionController.requestPermission(Permission.NOTIFICATIONS)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         contentWindowInsets = WindowInsets.safeDrawing,
