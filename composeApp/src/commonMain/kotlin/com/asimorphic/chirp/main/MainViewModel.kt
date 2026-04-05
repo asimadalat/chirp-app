@@ -2,10 +2,14 @@ package com.asimorphic.chirp.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.asimorphic.chat.domain.notification.DeviceTokenService
+import com.asimorphic.chat.domain.notification.PushNotificationService
+import com.asimorphic.core.data.util.PlatformUtil
 import com.asimorphic.core.domain.auth.SessionService
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -16,7 +20,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val sessionService: SessionService
+    private val sessionService: SessionService,
+    private val deviceTokenService: DeviceTokenService,
+    private val pushNotificationService: PushNotificationService
 ): ViewModel() {
     private val eventChannel = Channel<MainEvent>()
     val events = eventChannel.receiveAsFlow()
@@ -38,6 +44,8 @@ class MainViewModel(
         )
 
     private var previousRefreshToken: String? = null
+    private var previousDeviceToken: String? = null
+    private var currentDeviceToken: String? = null
 
     init {
         viewModelScope.launch {
@@ -61,8 +69,30 @@ class MainViewModel(
                     _state.update { it.copy(
                         isLoggedIn = false
                     ) }
+                    currentDeviceToken?.let {
+                        deviceTokenService.deregisterToken(it)
+                    }
+                    eventChannel.send(MainEvent.OnSessionExpired)
                 }
                 previousRefreshToken = authCredential?.refreshToken
-            }.launchIn(viewModelScope)
+            }
+            .combine(
+                pushNotificationService.observeDeviceToken()
+            ) { authCredential, deviceToken ->
+                currentDeviceToken = deviceToken
+                if (authCredential != null && deviceToken != null && deviceToken != previousDeviceToken) {
+                    registerDeviceToken(deviceToken, PlatformUtil.getOSName())
+                    previousDeviceToken = deviceToken
+                }
+            }
+            .launchIn(
+                scope = viewModelScope
+            )
+    }
+
+    private fun registerDeviceToken(token: String, platform: String) {
+        viewModelScope.launch {
+            deviceTokenService.registerToken(token, platform)
+        }
     }
 }

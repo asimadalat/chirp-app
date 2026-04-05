@@ -31,6 +31,10 @@ kotlin {
             dependencies {
                 implementation(dependencyNotation = libs.koin.android)
                 implementation(dependencyNotation = libs.androidx.lifecycle.process)
+
+                implementation(dependencyNotation = project.dependencies.platform(libs.firebase.bom))
+                implementation(dependencyNotation = libs.firebase.messaging)
+                implementation(dependencyNotation = libs.koin.android)
             }
         }
 
