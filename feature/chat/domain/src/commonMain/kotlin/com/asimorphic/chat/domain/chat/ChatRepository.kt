@@ -37,4 +37,6 @@ interface ChatRepository {
     fun getChatInfoById(
         chatId: String
     ): Flow<ChatInfo>
+
+    suspend fun deleteAllChats()
 }

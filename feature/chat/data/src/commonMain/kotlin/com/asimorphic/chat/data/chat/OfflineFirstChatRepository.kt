@@ -170,6 +170,10 @@ class OfflineFirstChatRepository(
             .map { it.toDomain() }
     }
 
+    override suspend fun deleteAllChats() {
+        db.chatDao.deleteAllChats()
+    }
+
     private suspend fun List<ChatParticipantEntity>.filterByActive(
         chatId: String
     ): List<ChatParticipantEntity> {

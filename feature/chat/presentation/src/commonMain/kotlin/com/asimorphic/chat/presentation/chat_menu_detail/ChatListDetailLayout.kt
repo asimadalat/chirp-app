@@ -90,7 +90,7 @@ fun ChatListDetailLayout(
                             )
                         }
                     },
-                    onConfirmLogoutClick = onLogout,
+                    onLogoutSuccess = onLogout,
                     onCreateChatClick = {
                         chatListDetailViewModel.onAction(
                             action = ChatListDetailAction.OnCreateChatClick

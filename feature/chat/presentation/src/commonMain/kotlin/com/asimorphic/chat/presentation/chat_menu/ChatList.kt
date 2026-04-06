@@ -22,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -44,6 +45,8 @@ import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.permission.Permission
 import com.asimorphic.core.presentation.permission.rememberPermissionController
+import com.asimorphic.core.presentation.util.ObserveAsEvents
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,7 +55,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ChatListRoot(
     selectedChatId: String?,
     onChatClick: (String?) -> Unit,
-    onConfirmLogoutClick: () -> Unit,
+    onLogoutSuccess: () -> Unit,
     onCreateChatClick: () -> Unit,
     onManageProfileClick: () -> Unit,
     viewModel: ChatListViewModel = koinViewModel()
@@ -64,12 +67,26 @@ fun ChatListRoot(
         viewModel.onAction(action = ChatListAction.OnChatClick(chatId = selectedChatId))
     }
 
+    val scope = rememberCoroutineScope()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when (event) {
+            is ChatListEvent.OnLogoutError -> {
+                scope.launch {
+                    snackbarHostState.showSnackbar(
+                        message = event.error.asStringAsync()
+                    )
+                }
+            }
+            ChatListEvent.OnLogoutSuccess -> onLogoutSuccess()
+        }
+    }
+
     ChatListScreen(
         state = state,
         onAction = { action ->
             when (action) {
                 is ChatListAction.OnChatClick -> onChatClick(action.chatId)
-                ChatListAction.OnConfirmLogout -> onConfirmLogoutClick()
                 ChatListAction.OnCreateChat -> onCreateChatClick()
                 ChatListAction.OnManageProfileClick -> onManageProfileClick()
                 else -> viewModel.onAction(action)
