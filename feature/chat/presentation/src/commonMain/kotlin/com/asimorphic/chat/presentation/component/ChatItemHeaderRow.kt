@@ -28,9 +28,11 @@ fun ChatItemHeaderRow(
         horizontalArrangement = Arrangement
             .spacedBy(space = 12.dp)
     ) {
-        ChirpProfilePictureStack(
-            profilePictures = chatUi.otherParticipants
-        )
+        if (chatUi.otherParticipants.isNotEmpty()) {
+            ChirpProfilePictureStack(
+                profilePictures = chatUi.otherParticipants
+            )
+        }
         Column(
             modifier = Modifier.weight(weight = 1f),
             verticalArrangement = Arrangement
@@ -38,7 +40,8 @@ fun ChatItemHeaderRow(
         ) {
             Text(
                 text = if (!isGroupChat)
-                            chatUi.otherParticipants.first().username
+                            chatUi.otherParticipants.firstOrNull()?.username
+                                ?: chatUi.selfParticipant.username
                        else
                             chatUi.otherParticipants.take(n = 3)
                                 .joinToString(separator = ", ")

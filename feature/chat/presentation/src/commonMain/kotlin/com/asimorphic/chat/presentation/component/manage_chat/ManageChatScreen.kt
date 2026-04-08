@@ -47,8 +47,7 @@ fun ManageChatScreen(
     val screenSizeType = currentDeviceScreenSizeType()
 
     val shouldHideHeader = screenSizeType == DeviceScreenSizeType.MOBILE_LANDSCAPE
-            || (isKeyboardVisible && screenSizeType != DeviceScreenSizeType.DESKTOP)
-            || isTextFieldFocused
+            && (isKeyboardVisible || isTextFieldFocused)
 
     Column(
         modifier = Modifier.clearFocusOnTap()

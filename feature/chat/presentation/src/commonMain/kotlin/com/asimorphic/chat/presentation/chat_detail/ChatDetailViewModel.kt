@@ -341,6 +341,8 @@ class ChatDetailViewModel(
                         messages = emptyList(),
                         chipState = ChipState()
                     ) }
+
+                    eventChannel.send(ChatDetailEvent.OnChatLeft)
                 }
                 .onFailure { exception ->
                     eventChannel.send(
