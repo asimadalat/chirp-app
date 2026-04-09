@@ -20,6 +20,7 @@ kotlin {
 
                 implementation(dependencyNotation = libs.material3.adaptive)
                 implementation(dependencyNotation = libs.bundles.koin.common)
+                implementation(dependencyNotation = libs.jetbrains.lifecycle.compose)
             }
         }
 

@@ -40,21 +40,26 @@ kotlin {
             implementation(libs.jetbrains.compose.viewmodel)
             implementation(libs.jetbrains.lifecycle.compose)
         }
-//        jvmMain.dependencies {
-//            implementation(compose.desktop.currentOs)
-//            implementation(libs.kotlinx.coroutinesSwing)
-//        }
+        desktopMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.kotlin.stdlib)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.jsystemthemedetector)
+            implementation(projects.core.presentation)
+        }
     }
 }
 
-//compose.desktop {
-//    application {
-//        mainClass = "com.asimorphic.chirp.MainKt"
-//
+compose.desktop {
+    application {
+        mainClass = "com.asimorphic.chirp.MainKt"
+
 //        nativeDistributions {
 //            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
 //            packageName = "com.asimorphic.chirp"
 //            packageVersion = "1.0.0"
 //        }
-//    }
-//}
+    }
+}
