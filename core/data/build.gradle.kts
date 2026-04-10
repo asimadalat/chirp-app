@@ -41,5 +41,11 @@ kotlin {
                 implementation(dependencyNotation = libs.ktor.client.darwin)
             }
         }
+
+        desktopMain {
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
     }
 }
