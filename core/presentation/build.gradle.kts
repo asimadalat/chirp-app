@@ -24,28 +24,10 @@ kotlin {
             }
         }
 
-        val mobileMain by creating {
-            dependencies {
-                implementation(dependencyNotation = libs.moko.permissions)
-                implementation(dependencyNotation = libs.moko.permissions.compose)
-                implementation(dependencyNotation = libs.moko.permissions.notifications)
-            }
-            dependsOn(commonMain.get())
-        }
-        androidMain.get().dependsOn(mobileMain)
-
-        val iosMain by creating {
-            dependsOn(mobileMain)
-        }
-
-        listOf(
-            iosArm64(),
-            iosX64(),
-            iosSimulatorArm64()
-        ).forEach { target ->
-            getByName("${target.name}Main") {
-                dependsOn(iosMain)
-            }
+        mobileMain.dependencies {
+            implementation(dependencyNotation = libs.moko.permissions)
+            implementation(dependencyNotation = libs.moko.permissions.compose)
+            implementation(dependencyNotation = libs.moko.permissions.notifications)
         }
 
         androidMain {
