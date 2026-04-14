@@ -1,6 +1,7 @@
 package com.asimorphic.chat.presentation.profile
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.draganddrop.dragAndDropTarget
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -21,6 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -42,8 +46,10 @@ import chirp.feature.chat.presentation.generated.resources.profile_image
 import chirp.feature.chat.presentation.generated.resources.save
 import chirp.feature.chat.presentation.generated.resources.upload
 import chirp.feature.chat.presentation.generated.resources.upload_icon
+import com.asimorphic.chat.presentation.profile.components.DragAndDropOverlay
 import com.asimorphic.chat.presentation.profile.components.ProfileHeaderSection
 import com.asimorphic.chat.presentation.profile.components.ProfileSectionLayout
+import com.asimorphic.chat.presentation.profile.media_picker.rememberDragAndDropTarget
 import com.asimorphic.chat.presentation.profile.media_picker.rememberImagePickerLauncher
 import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.button.ChirpButton
@@ -101,6 +107,21 @@ fun ProfileScreen(
     state: ProfileState,
     onAction: (ProfileAction) -> Unit,
 ) {
+    var isHoveringWithFile by remember {
+        mutableStateOf(false)
+    }
+    val dragAndDropTarget = rememberDragAndDropTarget(
+        onHover = { isHovered ->
+            isHoveringWithFile = isHovered
+        },
+        onDrop = { picked ->
+            onAction(ProfileAction.OnPictureSelected(
+                bytes = picked.bytes,
+                mimeType = picked.mimeType
+            ))
+        }
+    )
+
     Column(
         modifier = Modifier
             .clearFocusOnTap()
@@ -111,6 +132,10 @@ fun ProfileScreen(
             )
             .verticalScroll(
                 state = rememberScrollState()
+            )
+            .dragAndDropTarget(
+                shouldStartDragAndDrop = { true },
+                target = dragAndDropTarget
             )
     ) {
         ProfileHeaderSection(
@@ -261,6 +286,8 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
+
+    if (isHoveringWithFile) DragAndDropOverlay()
 
     if (state.shouldShowDeleteConfirmationDialog) {
         ChirpDestructiveConfirmationDialog(

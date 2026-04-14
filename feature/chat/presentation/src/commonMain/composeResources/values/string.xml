@@ -51,6 +51,8 @@
     <string name="error_incorrect_current_password">Incorrect password</string>
     <string name="error_new_password_matches_current">Your new password cannot be equal to the old one</string>
     <string name="error_invalid_file_type">Unsupported file type</string>
+
     <string name="select_a_profile_picture">Select a profile picture</string>
+    <string name="drop_picture_prompt">Drop image here to set new profile picture</string>
 
 </resources>

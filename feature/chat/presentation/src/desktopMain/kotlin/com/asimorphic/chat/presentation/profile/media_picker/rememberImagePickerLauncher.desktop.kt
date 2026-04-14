@@ -37,14 +37,14 @@ actual fun rememberImagePickerLauncher(onResult: (PickedImageData) -> Unit): Ima
     }
 }
 
-private val allowedFileExtensions = listOf(
+internal val allowedFileExtensions = listOf(
     "jpg",
     "jpeg",
     "png",
     "webp"
 )
 
-private fun getMimeTypeFromFilename(filename: String): String? {
+internal fun getMimeTypeFromFilename(filename: String): String? {
     val fileExtension = filename.substringAfterLast(".", "").lowercase()
     return when (fileExtension) {
         "jpg", "jpeg" -> "image/jpeg"
