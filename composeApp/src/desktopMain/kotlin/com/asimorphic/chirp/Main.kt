@@ -6,8 +6,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.window.application
 import com.asimorphic.chirp.application.ApplicationViewModel
+import com.asimorphic.chirp.application.ChirpTrayMenu
 import com.asimorphic.chirp.di.desktopModule
 import com.asimorphic.chirp.di.initKoin
+import com.asimorphic.chirp.theme.rememberApplicationTheme
 import com.asimorphic.chirp.window.ChirpWindow
 import org.koin.compose.koinInject
 
@@ -28,14 +30,23 @@ fun main() {
             if (windows.isEmpty()) exitApplication()
         }
 
+        val applicationTheme = rememberApplicationTheme(applicationState.themePreference)
+
         for (window in windows) {
             key(window.id) {
                 ChirpWindow(
                     onAddWindowClick = applicationViewModel::onAddWindowClick,
                     onCloseRequest = { applicationViewModel.onWindowCloseRequest(window.id) },
-                    onFocusChanged = { }
+                    onFocusChanged = { },
+                    applicationTheme = applicationTheme
                 )
             }
         }
+
+        ChirpTrayMenu(
+            state = applicationState.trayState,
+            setThemePreference = applicationState.themePreference,
+            onThemePreferenceClick = applicationViewModel::onThemePreferenceClick
+        )
     }
 }

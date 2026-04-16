@@ -12,6 +12,7 @@ import chirp.composeapp.generated.resources.chirp_logo_w_bg
 import chirp.composeapp.generated.resources.file
 import chirp.composeapp.generated.resources.new_window
 import com.asimorphic.chirp.App
+import com.asimorphic.chirp.theme.ApplicationTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -19,7 +20,8 @@ import org.jetbrains.compose.resources.stringResource
 fun ChirpWindow(
     onAddWindowClick: () -> Unit,
     onCloseRequest: () -> Unit,
-    onFocusChanged: (Boolean) -> Unit
+    onFocusChanged: (Boolean) -> Unit,
+    applicationTheme: ApplicationTheme
 ) {
     val windowState = rememberWindowState(
         width = 1250.dp,
@@ -49,6 +51,6 @@ fun ChirpWindow(
             }
         }
 
-        App()
+        App(isDarkMode = applicationTheme == ApplicationTheme.DARK)
     }
 }

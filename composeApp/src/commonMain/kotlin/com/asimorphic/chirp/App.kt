@@ -1,5 +1,6 @@
 package com.asimorphic.chirp
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
@@ -18,7 +19,8 @@ import org.koin.compose.viewmodel.koinViewModel
 @Preview
 fun App(
     onAuthStatusChecked: () -> Unit = {},
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = koinViewModel(),
+    isDarkMode: Boolean = isSystemInDarkTheme()
 ) {
     val navController = rememberNavController()
 
@@ -41,7 +43,9 @@ fun App(
         }
     }
 
-    ChirpTheme {
+    ChirpTheme(
+        darkMode = isDarkMode
+    ) {
         if (!state.isCheckingAuthStatus) {
             NavigationRoot(
                 navController = navController,

@@ -2,4 +2,5 @@
 <resources>
     <string name="file">File</string>
     <string name="new_window">New Window</string>
+    <string name="app_theme">App Theme</string>
 </resources>
