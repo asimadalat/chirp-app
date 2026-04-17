@@ -34,6 +34,10 @@ fun ChirpWindow(
         onCloseRequest = onCloseRequest,
         icon = painterResource(Res.drawable.chirp_logo_w_bg)
     ) {
+        WindowFocusObserver(
+            onFocusChanged = onFocusChanged
+        )
+
         MenuBar {
             Menu(
                 text = stringResource(Res.string.file),

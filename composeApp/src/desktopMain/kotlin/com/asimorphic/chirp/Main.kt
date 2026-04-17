@@ -37,7 +37,9 @@ fun main() {
                 ChirpWindow(
                     onAddWindowClick = applicationViewModel::onAddWindowClick,
                     onCloseRequest = { applicationViewModel.onWindowCloseRequest(window.id) },
-                    onFocusChanged = { },
+                    onFocusChanged = { isFocused ->
+                        applicationViewModel.onWindowFocusChanged(window.id, isFocused)
+                    },
                     applicationTheme = applicationTheme
                 )
             }

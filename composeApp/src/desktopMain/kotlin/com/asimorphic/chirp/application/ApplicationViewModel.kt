@@ -1,5 +1,7 @@
 package com.asimorphic.chirp.application
 
+import androidx.compose.ui.window.Notification
+import com.asimorphic.chat.data.notification.DesktopNotifier
 import com.asimorphic.chirp.window.WindowState
 import com.asimorphic.core.domain.preferences.ThemePreference
 import com.asimorphic.core.domain.preferences.ThemePreferences
@@ -15,7 +17,8 @@ import kotlinx.coroutines.launch
 
 class ApplicationViewModel(
     private val applicationScope: CoroutineScope,
-    private val themePreferences: ThemePreferences
+    private val themePreferences: ThemePreferences,
+    private val desktopNotifier: DesktopNotifier
 ) {
 
     private var hasLoadedInitialData = false
@@ -25,6 +28,7 @@ class ApplicationViewModel(
         .onStart {
             if (!hasLoadedInitialData) {
                 /** Load initial data here **/
+                observeNewMessages()
                 observeThemePreference()
 
                 hasLoadedInitialData = true
@@ -35,6 +39,27 @@ class ApplicationViewModel(
             started = SharingStarted.Lazily,
             initialValue = ApplicationState()
         )
+    
+    fun observeNewMessages() {
+        desktopNotifier
+            .observeNewNotifications()
+            .onEach { notificationPayload ->
+                val isAppForeground = state.value.windows.any { it.isFocused }
+
+                if (isAppForeground) {
+                    state.value.trayState.sendNotification(
+                        notification = Notification(
+                            title = notificationPayload.title,
+                            message = notificationPayload.message,
+                            type = Notification.Type.Info
+                        )
+                    )
+                }
+            }
+            .launchIn(
+                scope = applicationScope
+            )
+    }
 
     fun observeThemePreference() {
         themePreferences
@@ -47,6 +72,17 @@ class ApplicationViewModel(
             .launchIn(
                 scope = applicationScope
             )
+    }
+
+    fun onWindowFocusChanged(id: String, isFocused: Boolean) {
+        _state.update { it.copy(
+            windows = it.windows
+                .map { windowState ->
+                    if (windowState.id == id) {
+                        windowState.copy(isFocused = isFocused)
+                    } else windowState
+                }
+        ) }
     }
 
     fun onAddWindowClick() = _state.update { it.copy(
