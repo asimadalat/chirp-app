@@ -20,6 +20,7 @@ import org.jetbrains.compose.resources.stringResource
 fun ChirpWindow(
     onAddWindowClick: () -> Unit,
     onCloseRequest: () -> Unit,
+    onDeepLinkListenerSetup: () -> Unit,
     onFocusChanged: (Boolean) -> Unit,
     applicationTheme: ApplicationTheme
 ) {
@@ -55,6 +56,9 @@ fun ChirpWindow(
             }
         }
 
-        App(isDarkMode = applicationTheme == ApplicationTheme.DARK)
+        App(
+            isDarkMode = applicationTheme == ApplicationTheme.DARK,
+            onDeepLinkListenerSetup = onDeepLinkListenerSetup
+        )
     }
 }

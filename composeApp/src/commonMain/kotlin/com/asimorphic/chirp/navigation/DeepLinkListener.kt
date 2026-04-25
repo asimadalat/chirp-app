@@ -7,7 +7,8 @@ import androidx.navigation.NavUri
 
 @Composable
 fun DeepLinkListener(
-    navController: NavController
+    navController: NavController,
+    onSetup: () -> Unit
 ) {
     DisposableEffect(key1 = Unit) {
         ExternalUriHandler.listener = { uri ->
@@ -15,6 +16,8 @@ fun DeepLinkListener(
                 deepLink = NavUri(uriString = uri)
             )
         }
+
+        onSetup()
 
         onDispose {
             ExternalUriHandler.listener = null

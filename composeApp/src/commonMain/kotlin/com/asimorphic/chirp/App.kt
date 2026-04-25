@@ -19,6 +19,7 @@ import org.koin.compose.viewmodel.koinViewModel
 @Preview
 fun App(
     onAuthStatusChecked: () -> Unit = {},
+    onDeepLinkListenerSetup: () -> Unit = {},
     viewModel: MainViewModel = koinViewModel(),
     isDarkMode: Boolean = isSystemInDarkTheme()
 ) {
@@ -55,7 +56,10 @@ fun App(
                     AuthGraphRoutes.Graph
                 }
             )
-            DeepLinkListener(navController)
+            DeepLinkListener(
+                navController = navController,
+                onSetup = onDeepLinkListenerSetup
+            )
         }
     }
 }
