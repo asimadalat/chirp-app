@@ -63,8 +63,10 @@ class ChatDetailViewModel(
         .onEach { chatId ->
             if (chatId == null)
                 currentPaginator = null
-            else
+            else {
                 configurePaginatorForChat(chatId = chatId)
+                loadNextItems()
+            }
         }
         .flatMapLatest { chatId ->
             if (chatId != null)
