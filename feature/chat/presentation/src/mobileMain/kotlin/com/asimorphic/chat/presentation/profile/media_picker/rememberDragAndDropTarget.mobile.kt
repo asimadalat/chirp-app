@@ -1,6 +1,8 @@
 package com.asimorphic.chat.presentation.profile.media_picker
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draganddrop.DragAndDropEvent
 import androidx.compose.ui.draganddrop.DragAndDropTarget
 
 @Composable

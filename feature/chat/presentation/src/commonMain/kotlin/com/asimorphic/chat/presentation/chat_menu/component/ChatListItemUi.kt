@@ -38,7 +38,6 @@ fun ChatListItemUi(
     modifier: Modifier = Modifier
 ) {
     val isGroupChat = chat.otherParticipants.size > 1
-
     Row(
         modifier = modifier
             .height(intrinsicSize = IntrinsicSize.Min)

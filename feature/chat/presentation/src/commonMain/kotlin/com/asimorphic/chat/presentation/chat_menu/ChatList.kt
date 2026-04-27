@@ -35,12 +35,16 @@ import chirp.feature.chat.presentation.generated.resources.create_chat
 import chirp.feature.chat.presentation.generated.resources.logout
 import chirp.feature.chat.presentation.generated.resources.no_chats
 import chirp.feature.chat.presentation.generated.resources.no_chats_subtitle
+import com.asimorphic.chat.domain.model.ChatMessage
+import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.chat.presentation.chat_menu.component.ChatListHeader
 import com.asimorphic.chat.presentation.chat_menu.component.ChatListItemUi
 import com.asimorphic.chat.presentation.component.EmptyContentPlaceholder
+import com.asimorphic.chat.presentation.model.ChatUi
 import com.asimorphic.core.designsystem.component.brand.ChirpHorizontalDivider
 import com.asimorphic.core.designsystem.component.button.ChirpFloatingActionButton
 import com.asimorphic.core.designsystem.component.dialog.ChirpDestructiveConfirmationDialog
+import com.asimorphic.core.designsystem.component.profile_picture.ChatParticipantUi
 import com.asimorphic.core.designsystem.theme.ChirpTheme
 import com.asimorphic.core.designsystem.theme.extended
 import com.asimorphic.core.presentation.permission.Permission
@@ -50,6 +54,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
+import kotlin.time.Clock
 
 @Composable
 fun ChatListRoot(
@@ -174,7 +179,7 @@ fun ChatListScreen(
                                         onAction(ChatListAction.OnChatClick(chatId = chat.id))
                                     }
                             )
-                            ChirpHorizontalDivider()
+                            ChirpHorizontalDivider(startIndent = 70.dp)
                         }
                     }
                 }
@@ -204,9 +209,111 @@ fun ChatListScreen(
 @Preview
 @Composable
 private fun Preview() {
-    ChirpTheme {
+    ChirpTheme(darkMode = true) {
         ChatListScreen(
-            state = ChatListState(),
+            state = ChatListState(
+                chats = listOf(
+                    ChatUi(
+                        id = "chat_1",
+                        selfParticipant = ChatParticipantUi(
+                            id = "user_1",
+                            initials = "JD",
+                            username = "john_doe"
+                        ),
+                        otherParticipants = listOf(
+                            ChatParticipantUi(
+                                id = "user_2",
+                                initials = "AS",
+                                username = "alice_smith",
+                                imageUrl = "https://example.com/alice.jpg"
+                            )
+                        ),
+                        lastMessage = ChatMessage(
+                            id = "msg_1",
+                            chatId = "chat_1",
+                            senderId = "user_2",
+                            content = "Hey John, how are you?",
+                            createdAt = Clock.System.now(),
+                            deliveryStatus = ChatMessageDeliveryStatus.SENT
+                        ),
+                        lastMessageSender = "user_2"
+                    ),
+
+                    ChatUi(
+                        id = "chat_2",
+                        selfParticipant = ChatParticipantUi(
+                            id = "user_1",
+                            initials = "JD",
+                            username = "john_doe"
+                        ),
+                        otherParticipants = listOf(
+                            ChatParticipantUi(
+                                id = "user_3",
+                                initials = "BW",
+                                username = "bob_wilson"
+                            ),
+                            ChatParticipantUi(
+                                id = "user_4",
+                                initials = "CK",
+                                username = "carla_k"
+                            )
+                        ),
+                        lastMessage = ChatMessage(
+                            id = "msg_2",
+                            chatId = "chat_2",
+                            senderId = "user_1",
+                            content = "Let’s meet tomorrow.",
+                            createdAt = Clock.System.now(),
+                            deliveryStatus = ChatMessageDeliveryStatus.SENT
+                        ),
+                        lastMessageSender = "user_1"
+                    ),
+
+                    ChatUi(
+                        id = "chat_3",
+                        selfParticipant = ChatParticipantUi(
+                            id = "user_1",
+                            initials = "JD",
+                            username = "john_doe"
+                        ),
+                        otherParticipants = listOf(
+                            ChatParticipantUi(
+                                id = "user_5",
+                                initials = "EM",
+                                username = "emma_m"
+                            )
+                        ),
+                        lastMessage = null,
+                        lastMessageSender = null
+                    ),
+
+                    ChatUi(
+                        id = "chat_4",
+                        selfParticipant = ChatParticipantUi(
+                            id = "user_1",
+                            initials = "JD",
+                            username = "john_doe"
+                        ),
+                        otherParticipants = listOf(
+                            ChatParticipantUi(
+                                id = "user_6",
+                                initials = "RT",
+                                username = "robert_t",
+                                imageUrl = "https://example.com/robert.png"
+                            )
+                        ),
+                        lastMessage = ChatMessage(
+                            id = "msg_3",
+                            chatId = "chat_4",
+                            senderId = "user_6",
+                            content = "Got the files, thanks!",
+                            createdAt = Clock.System.now(),
+                            deliveryStatus = ChatMessageDeliveryStatus.SENT
+                        ),
+                        lastMessageSender = "user_6"
+                    )
+                )
+            ),
             onAction = {},
             snackbarHostState = remember { SnackbarHostState() }
         )
