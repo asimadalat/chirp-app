@@ -14,11 +14,15 @@ import com.asimorphic.chat.domain.model.ChatMessageWithSender
 import kotlin.time.Instant
 
 fun ChatDto.toDomain(): Chat {
+    val lastMessageSenderUsername = lastMessage?.let { messageDto ->
+        participants.find { it.userId == messageDto.senderId }?.username
+    }
     return Chat(
         id = id,
         participants = participants.map { it.toDomain() },
         lastActivityAt = Instant.parse(input = lastActivityAt),
-        lastMessage = lastMessage?.toDomain()
+        lastMessage = lastMessage?.toDomain(),
+        lastMessageSenderUsername
     )
 }
 
@@ -26,11 +30,15 @@ fun ChatEntity.toDomain(
     participants: List<ChatParticipant>,
     lastMessage: ChatMessage? = null
 ): Chat {
+    val lastMessageSenderUsername = lastMessage?.let { messageDto ->
+        participants.find { it.userId == messageDto.senderId }?.username
+    }
     return Chat(
         id = chatId,
         participants = participants,
         lastActivityAt = Instant.fromEpochMilliseconds(epochMilliseconds = lastActivityAt),
-        lastMessage = lastMessage
+        lastMessage = lastMessage,
+        lastMessageSenderUsername
     )
 }
 
@@ -42,7 +50,8 @@ fun ChatWithParticipantsRelation.toDomain(): Chat {
             .fromEpochMilliseconds(
                 epochMilliseconds = chat.lastActivityAt
             ),
-        lastMessage = lastMessage?.toDomain()
+        lastMessage = lastMessage?.toDomain(),
+        lastMessageSenderUsername = lastMessage?.senderUsername
     )
 }
 

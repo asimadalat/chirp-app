@@ -13,8 +13,6 @@ fun Chat.toUi(selfParticipantId: String): ChatUi {
         selfParticipant = self.first().toUi(),
         otherParticipants = other.map { it.toUi() },
         lastMessage = lastMessage,
-        lastMessageSender = this.participants.find {
-            it.userId == lastMessage?.senderId
-        }?.username
+        lastMessageSender = lastMessageSenderUsername
     )
 }
