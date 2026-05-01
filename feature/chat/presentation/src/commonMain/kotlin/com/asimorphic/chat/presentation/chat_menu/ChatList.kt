@@ -179,7 +179,7 @@ fun ChatListScreen(
                                         onAction(ChatListAction.OnChatClick(chatId = chat.id))
                                     }
                             )
-                            ChirpHorizontalDivider(startIndent = 70.dp)
+                            ChirpHorizontalDivider(startIndent = 75.dp)
                         }
                     }
                 }

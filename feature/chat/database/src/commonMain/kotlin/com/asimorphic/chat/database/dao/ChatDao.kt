@@ -20,6 +20,9 @@ interface ChatDao {
     @Upsert
     suspend fun upsertChats(chats: List<ChatEntity>)
 
+    @Query(value = "UPDATE chat_entity SET lastActivityAt = :timestamp WHERE chatId = :chatId")
+    suspend fun updateLastActivity(chatId: String, timestamp: Long)
+
     @Query(value = "SELECT * FROM chat_entity WHERE chatId = :chatId")
     @Transaction
     suspend fun getChatById(chatId: String): ChatWithParticipantsRelation?

@@ -109,8 +109,14 @@ class ChatWebSocketConnectionService(
                 chatId = message.chatId
             )
 
+        val messageEntity = message.toEntity()
+
+        db.chatDao.updateLastActivity(
+            chatId = messageEntity.chatId,
+            timestamp = messageEntity.sentAt
+        )
         db.chatMessageDao.upsertMessage(
-            message = message.toEntity()
+            message = messageEntity
         )
     }
 
