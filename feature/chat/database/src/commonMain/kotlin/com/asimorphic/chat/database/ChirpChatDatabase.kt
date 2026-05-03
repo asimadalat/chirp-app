@@ -23,7 +23,7 @@ import com.asimorphic.chat.database.view.LastMessageView
     views = [
         LastMessageView::class
     ],
-    version = 1
+    version = 2
 )
 @ConstructedBy(
     value = ChirpChatDatabaseConstructor::class

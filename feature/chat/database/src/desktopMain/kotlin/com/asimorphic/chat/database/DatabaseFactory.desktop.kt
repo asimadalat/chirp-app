@@ -15,6 +15,12 @@ actual class DatabaseFactory {
 
         val databaseFile = File(directory, ChirpChatDatabase.DB_NAME)
 
-        return Room.databaseBuilder(databaseFile.absolutePath)
+        return Room
+            .databaseBuilder<ChirpChatDatabase>(
+                name = databaseFile.absolutePath
+            )
+            .fallbackToDestructiveMigration(
+                dropAllTables = true
+            )
     }
 }

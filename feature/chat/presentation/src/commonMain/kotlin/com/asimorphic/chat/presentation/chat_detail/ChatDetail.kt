@@ -283,7 +283,7 @@ fun ChatDetailScreen(
                             onPaginationRetryClick = {
                                 onAction(ChatDetailAction.OnPaginationRetryClick)
                             },
-                            paginationError = state.paginationError?.toString(),
+                            paginationError = state.paginationError?.asString(),
                             isPaginationLoading = state.isPaginationLoading,
                         )
 
