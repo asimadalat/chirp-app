@@ -40,7 +40,7 @@ fun ChirpChatBubble(
     triangleSize: Dp = 12.dp,
     onLongClick: (() -> Unit)? = null
 ) {
-    val padding  = 10.dp
+    val padding  = 8.dp
     Column(
         modifier = modifier
             .then(

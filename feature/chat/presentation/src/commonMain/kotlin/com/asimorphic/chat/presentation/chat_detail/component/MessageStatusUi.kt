@@ -8,7 +8,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +20,6 @@ import chirp.feature.chat.presentation.generated.resources.sending
 import chirp.feature.chat.presentation.generated.resources.sent
 import com.asimorphic.chat.domain.model.ChatMessageDeliveryStatus
 import com.asimorphic.core.designsystem.theme.extended
-import com.asimorphic.core.designsystem.theme.labelXSmall
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 
@@ -57,11 +55,6 @@ fun MessageStatus(
             tint = colour,
             modifier = Modifier.size(size = 14.dp)
         )
-        Spacer(modifier = Modifier.width(width = 4.dp))
-        Text(
-            text = text,
-            color = colour,
-            style = MaterialTheme.typography.labelXSmall
-        )
+        Spacer(modifier = Modifier.width(width = 12.dp))
     }
 }
